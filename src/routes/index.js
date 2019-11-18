@@ -1,13 +1,8 @@
-import express from 'express';
-import TestController from '../controllers';
+import auth from './employeeRoutes';
+import test from './testRoutes';
 
-const router = express.Router();
 
-router.get('/test', TestController.test);
-
-router.get('/', (req, res, next) => {
-    
-    res.send('<div style=\'text-align: center;\'><h1>Welcome to Teamwork</h1><h3>... where teams actually WORK!</h3></div>');
-});
-
-export default router;
+export default (app) => {
+  app.use('/api/v1/auth', auth);
+  app.use('/api/v1/test', test);
+};

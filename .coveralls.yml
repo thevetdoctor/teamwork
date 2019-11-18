@@ -1,1 +1,2 @@
-repo_token: process.env.REPO_TOKEN
+repo_token: Pbl8fuayBDGRpmxSyLeOorQyGnvBx79Sw
+# repo_token: process.env.REPO_TOKEN

@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import parser from 'body-parser';
 import db from './db';
-import route from './routes';
+import routeHandler from './routes';
 import regenerator from 'regenerator-runtime';
 import migrate from './db/migrations';
 
@@ -11,12 +11,16 @@ regenerator;
 
 const app = express();
 
+
 // app.use(require('connect-livereload'));
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(parser.urlencoded({ extended: false }));
+app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
  
+
+routeHandler(app);
+
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', '*');
@@ -35,9 +39,13 @@ app.use((error, req, res, next) => {
     console.error(error.stack);
     res.status(500).send('Something broke!');
     next();
-});
+}); 
 
-app.use('/api/v1', route);
+app.get('/api/v1', (req, res, next) => {
+    
+    res.send('<div style=\'text-align: center;\'><h1>Welcome to Teamwork</h1><h3>... where teams actually WORK!</h3></div>');
+});
+ 
 app.get('/', (req, res, next) => {
     
     res.send(`<div style='text-align: center;'>
@@ -58,3 +66,5 @@ await db.query('select * from team')
 app.listen(port, () => {
     console.log(`Server running on ${port}`);
 });
+
+export default app;

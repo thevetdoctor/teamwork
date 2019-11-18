@@ -1,5 +1,5 @@
 const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
-                                                  employeeId SERIAL PRIMARY KEY,
+                                                  userId SERIAL PRIMARY KEY,
                                                   firstName TEXT NOT NULL,  
                                                   lastName TEXT NOT NULL,
                                                   email VARCHAR NOT NULL,
