@@ -18,7 +18,7 @@ class EmployeeController {
     if (missingValue.length > 0) {
       return res.status(400).json({
         status: 'error',
-        error: `${missingValue} not supplied`
+        error: `${missingValue} not supplied`,
       });
     }
     const emailExist = await EmployeeModel.find(`email=${employee.email}`);
@@ -39,7 +39,7 @@ class EmployeeController {
     console.log('displayed employee', displayedEmployee);
     const displayedEmployee = { 
                                 id: newemployee[0].userid,
-                                name: newemployee[0].firstName,
+                                name: newemployee[0].firstname,
                                 email: newemployee[0].email,
                               };
     const token = jwt.sign({ displayedEmployee }, process.env.SECRET, { expiresIn: '2h' });
@@ -55,7 +55,49 @@ class EmployeeController {
   }
 
 
-  
+  static async signIn(req, res) {
+    const { email, password } = req.body;
+
+    let signinDetails = { email, password };
+    const missingValue = Object.keys(signinDetails).filter(item => signinDetails[item] === undefined);
+    console.log('missing value', missingValue);
+    if (missingValue.length > 0) {
+      return res.status(400).json({
+        status: 'error',
+        error: `${missingValue} not supplied`,
+      });
+    }
+    const emailExist = await EmployeeModel.find(`email=${email}`);
+
+    // console.log('emailExist', emailExist);
+    if (emailExist) {
+      if (emailExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with email' });
+      if (emailExist.length < 1) return res.status(400).json({ status: 'error', error: 'User not registered' });
+    }
+
+    const compared = bcrypt.compareSync(password, emailExist[0].password);
+    if (!compared) {
+      return res.status(400).json({ status: 'error', error: 'Password is Invalid' });
+    }
+
+    const displayedEmployee = { 
+                              id: emailExist[0].userid,
+                              firstName: emailExist[0].firstname,
+                              lastName: emailExist[0].lastname,
+                              email: emailExist[0].email,
+                              is_admin: emailExist[0].is_admin,
+                            };
+    const token = jwt.sign({ displayedEmployee }, process.env.SECRET, { expiresIn: '2h' });
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        token, 
+        userId: emailExist[0].userid,
+      },
+    });
+  }
+
 }
 
 

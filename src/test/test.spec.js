@@ -56,7 +56,7 @@ describe('Employee Endpoints', () => {
         res.body.data.should.be.a('object');
         res.body.data.should.have.property('message');
         res.body.data.should.have.property('token');
-        res.body.data.should.have.property('userid');
+        res.body.data.should.have.property('userId');
       });
     done();
   });
@@ -123,6 +123,89 @@ describe('Employee Endpoints', () => {
         jobRole: 'staff',
         department: 'production',
         address: 'Lagos'
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('signIn  method (POST) should exist', () => {
+    EmployeeController.signIn.should.exist;
+  });
+
+  it('Sign In method (POST) should sign in a registered user', (done) => {
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send({
+        email: `email${count}@email.com`,
+        password: `password${count}`,
+      })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        // res.body.data.should.have.property('message');
+        res.body.data.should.have.property('token');
+        res.body.data.should.have.property('userid');
+      });
+    done();
+  });
+
+  it('Sign In method (POST) should return ERROR for input errors', (done) => {
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send({
+        email: `email@email.com`,
+        password: `password${count}`,
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('Sign In method (POST) should return ERROR if any value is missing', (done) => {
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send({
+        email: '',
+        password: `password${count}`,
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('Sign In method (POST) should return ERROR if password is INVALID', (done) => {
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send({
+        email: `email${count}@email.com`,
+        password: `password`,
       })
       .end((err, res) => {
         res.should.have.status(400);
