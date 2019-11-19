@@ -1,5 +1,5 @@
 import db from '../db';
-import { findQuery, updateQuery } from '../db/query';
+import { findQuery, updateQuery, deleteQuery } from '../db/query';
 import 'regenerator-runtime';
 
 export default class BaseModel {
@@ -47,23 +47,23 @@ export default class BaseModel {
   }
 
  
-  // static async delete(position) {
-  //   let obj = this.name;
-  //   obj = obj.replace('Model', 's').toLowerCase();
-  //   // console.log(obj);
-  //   // try {
-  //   const res = await db.query(...deleteQuery(obj, position))
-  //     .then(result => result.rows)
-  //     .catch(err => {
-  //       return 'Error found here!', err.message;
-  //     });
-  //   // console.log(res);
-  //   // return res;
-  //   // } catch(err) {
-  //   // console.log('Error with try catch');
-  //   // }
-  //   return res;
-  // }
+  static async delete(position) {
+    let obj = this.name;
+    obj = obj.replace('Model', 's').toLowerCase();
+    // console.log(obj);
+    // try {
+    const res = await db.query(...deleteQuery(obj, position))
+      .then(result => result.rows)
+      .catch(err => {
+        return 'Error found here!', err.message;
+      });
+    // console.log(res);
+    // return res;
+    // } catch(err) {
+    // console.log('Error with try catch');
+    // }
+    return res;
+  }
 
   static async update(position, condition, by) {
     let obj = this.name;
