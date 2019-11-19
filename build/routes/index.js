@@ -5,17 +5,18 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _express = _interopRequireDefault(require("express"));
+var _employeeRoutes = _interopRequireDefault(require("./employeeRoutes"));
 
-var _controllers = _interopRequireDefault(require("../controllers"));
+var _articleRoutes = _interopRequireDefault(require("./articleRoutes"));
+
+var _testRoutes = _interopRequireDefault(require("./testRoutes"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var router = _express["default"].Router();
+var _default = function _default(app) {
+  app.use('/api/v1/auth', _employeeRoutes["default"]);
+  app.use('/api/v1/articles', _articleRoutes["default"]);
+  app.use('/api/v1/test', _testRoutes["default"]);
+};
 
-router.get('/test', _controllers["default"].test);
-router.get('/', function (req, res, next) {
-  res.send('<div style=\'text-align: center;\'><h1>Welcome to Teamwork</h1><h3>... where teams actually WORK!</h3></div>');
-});
-var _default = router;
 exports["default"] = _default;

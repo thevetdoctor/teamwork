@@ -404,7 +404,7 @@ describe('Article Endpoints', () => {
     done();
   });
   
-  it('updateArticle method (POST) should return ERROR if article is NOT FOUND', (done) => {
+  it('updateArticle method (PATCH) should return ERROR if article is NOT FOUND', (done) => {
     chai.request(server)
       .patch('/api/v1/articles/100000')
       .send({
@@ -466,7 +466,7 @@ describe('Article Endpoints', () => {
     done();
   });
 
-  it('deleteArticle method (PATCH) should return ERROR if authorId is not a number', (done) => {
+  it('deleteArticle method (DELETE) should return ERROR if authorId is not a number', (done) => {
     chai.request(server)
       .delete('/api/v1/articles/1')
       .send({
@@ -484,7 +484,7 @@ describe('Article Endpoints', () => {
     done();
   });
 
-  it('deleteArticle method (PATCH) should return ERROR if any value is missing', (done) => {
+  it('deleteArticle method (DELETE) should return ERROR if any value is missing', (done) => {
     chai.request(server)
       .delete('/api/v1/articles/1')
       .send({
@@ -502,11 +502,112 @@ describe('Article Endpoints', () => {
     done();
   });
   
-  it('deleteArticle method (POST) should return ERROR if article is NOT FOUND', (done) => {
+  it('deleteArticle method (DELETE) should return ERROR if article is NOT FOUND', (done) => {
     chai.request(server)
       .delete('/api/v1/articles/100000')
       .send({
         authorId: 1,
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+    // Test createComment Endpoints
+  it('createComment method (POST) should exist', () => {
+    ArticleController.createComment.should.exist;
+  });
+
+  it('createComment method (POST) should create a comment for a specific article', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/1/comment')
+      .send({
+        authorId: 1,
+        comment: 'latest comment',
+      })
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        res.body.data.should.have.property('message');
+      });
+    done();
+  });
+
+  it('createComment method (POST) should return ERROR if articleId is not a number', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/a/comment')
+      .send({
+        authorId: 1,
+        comment: 'latest comment',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('createComment method (POST) should return ERROR if authorId is not a number', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/1/comment')
+      .send({
+        authorId: 'a',
+        comment: 'latest comment',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('createComment method (POST) should return ERROR if any value is missing', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/1/comment')
+      .send({
+        authorId: '',
+        comment: 'latest comment',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+  
+  it('createComment method (POST) should return ERROR if article is NOT FOUND', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/100000/comment')
+      .send({
+        authorId: 1,
+        comment: 'latest comment',
       })
       .end((err, res) => {
         res.should.have.status(400);

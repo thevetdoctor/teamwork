@@ -1,11 +1,15 @@
 import ArticleModel from '../models/articleModel';
 import EmployeeModel from '../models/employeeModel';
+import CommentModel from '../models/commentModel';
 
 
 class ArticleController {
+          
+          // create articles
+
     static async createArticle(req, res) {
         const { title, article } = req.body;
-        console.log(req.body);
+        // console.log(req.body);
         const authorId = parseInt(req.body.authorId, 10);
     
         const newArticle = new ArticleModel(authorId, title, article);
@@ -13,15 +17,15 @@ class ArticleController {
         // console.log(newArticle, ArticleModel);
 
     const missingValue = Object.keys(newArticle)
-                               .filter(item => ((newArticle[item] === undefined) && (isNaN(newArticle[item]))));
-    console.log(missingValue);
+                               .filter(item => ((newArticle[item] === undefined) || (newArticle[item] === '')));
+    // console.log(missingValue);
     if (missingValue.length > 0) {
           return res.status(400).json({
             status: 'error',  
             error: `${missingValue} not supplied`,
         });
     }
-    
+     
         const authorExist = await EmployeeModel.find(`userid=${newArticle.authorId}`);
         if (authorExist) {
           if (authorExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with author' });
@@ -29,6 +33,7 @@ class ArticleController {
         }
     
         const articleExist = await ArticleModel.find(`title=${newArticle.title}`);
+        // console.log('article exist', articleExist);
         if (articleExist) {
           if (articleExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with article' });
           if (articleExist.length > 0) return res.status(400).json({ status: 'error', error: 'Article already exists' });
@@ -54,7 +59,8 @@ class ArticleController {
       }
     
 
-      
+      // Update articles by ID
+
   static async updateArticle(req, res) {
     const { title, article } = req.body;
     let { authorId } = req.body;
@@ -63,7 +69,7 @@ class ArticleController {
     // console.log(authorId, req.body, req.params);
 
     const articleToBeUpdated = new ArticleModel(authorId, title, article);
-    console.log(articleToBeUpdated);
+    // console.log(articleToBeUpdated);
 
     const missingValue = Object.keys(articleToBeUpdated)
                               .filter(item => ((articleToBeUpdated[item] === undefined) || articleToBeUpdated[item] === ''));
@@ -79,7 +85,7 @@ class ArticleController {
         });
     }
 
-    const articleExist = await ArticleModel.findByJoinEmployees(`articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
+    const articleExist = await ArticleModel.findByJoin('employees', `articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
     if (articleExist) {
       if (articleExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with article' });
       if (articleExist.length < 1) return res.status(400).json({ status: 'error', error: 'Article not found' });
@@ -103,7 +109,8 @@ class ArticleController {
   }
 
 
-  
+  // Delete articles by ID
+
   static async deleteArticle(req, res) {
     const { articleId } = req.params;
     let authorId = req.body.authorId;
@@ -119,12 +126,12 @@ class ArticleController {
     if (isNaN(articleId)) return res.status(400).json({ status: 'error', error: 'ArticleId must be a number'});
     if (isNaN(authorId)) return res.status(400).json({ status: 'error', error: 'AuthorId must be a number'});
 
-    const articleExist = await ArticleModel.findByJoinEmployees(`articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
+    const articleExist = await ArticleModel.findByJoin('employees', `articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
     if (articleExist) {
       if (articleExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with article' });
       if (articleExist.length < 1) return res.status(400).json({ status: 'error', error: 'Article not found' });
     }
-    console.log('article exist', articleExist[0]);
+    // console.log('article exist', articleExist[0]);
     const articleDeleted = await ArticleModel.delete(`articleid=${articleId}`);
 
     return res.status(200).json({
@@ -133,6 +140,61 @@ class ArticleController {
         message: 'Article successfully deleted'
       }
     });
+  }
+
+
+  // Create comment on articles
+
+  static async createComment(req, res) {
+    const { authorId, comment } = req.body;
+    const { articleId } = req.params;
+  
+        const commentToBeCreated = new CommentModel(authorId, articleId, comment);
+        // console.log(commentToBeCreated);
+        
+        const missingValue = Object.keys(commentToBeCreated)
+                                  .filter(item => ((commentToBeCreated[item] === undefined) || (commentToBeCreated[item] === '')));
+        // console.log(missingValue);
+        if (missingValue.length > 0) {
+              return res.status(400).json({
+                status: 'error',  
+                error: `${missingValue} not supplied`,
+            });
+        }
+    
+      if (isNaN(articleId)) return res.status(400).json({ status: 'error', error: 'ArticleId must be a number'});
+      if (isNaN(authorId)) return res.status(400).json({ status: 'error', error: 'AuthorId must be a number'});
+  
+      const articleExist = await ArticleModel.findByJoin('employees', `articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
+      if (articleExist) {
+        if (articleExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with article' });
+        if (articleExist.length < 1) return res.status(400).json({ status: 'error', error: 'Article not found' });
+      }
+      // console.log('article exist', articleExist[0]);
+
+      const commentExist = await CommentModel.findByJoin('articles', `comments.articleid=articles.articleid`, `articles.articleid=${articleId} AND comments.comment='${comment}'`);
+      // console.log('comment exist', commentExist);
+
+      if (commentExist) {
+        if (commentExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found' });
+        if (commentExist.length > 0) return res.status(400).json({ status: 'error', error: 'Same comment already given' });
+      }
+
+      const newComment = await commentToBeCreated.save();
+      if (newComment.indexOf('not') >= 0) {
+        return res.status(400).json({ error: 'Some error found with new comment' });
+      }
+
+      const data = {
+        message: 'Comment successfully created',
+        createdOn: newComment[0].createdon,
+        articleTitle: articleExist[0].title,
+        article: articleExist[0].article,
+        comment,
+      }
+      return res.status(201).json({
+        data,
+      });
   }
 
 } 
