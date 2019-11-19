@@ -322,7 +322,7 @@ describe('Article Endpoints', () => {
 
   it('updateArticle method (PATCH) should update article with title & article', (done) => {
     chai.request(server)
-      .post('/api/v1/articles/1')
+      .patch('/api/v1/articles/1')
       .send({
         authorId: 1,
         title: `Test Update Edition${count}`,
@@ -346,7 +346,7 @@ describe('Article Endpoints', () => {
 
   it('updateArticle method (PATCH) should return ERROR if articleId is not a number', (done) => {
     chai.request(server)
-      .post('/api/v1/articles/a')
+      .patch('/api/v1/articles/a')
       .send({
         authorId: 1,
         title: `Test Update Edition${count}`,
@@ -366,9 +366,9 @@ describe('Article Endpoints', () => {
 
   it('updateArticle method (PATCH) should return ERROR if authorId is not a number', (done) => {
     chai.request(server)
-      .post('/api/v1/articles/1')
+      .patch('/api/v1/articles/1')
       .send({
-        authorId: a,
+        authorId: 'a',
         title: `Test Update Edition${count}`,
         article: 'This is one of the test edition articles, published by @animalworldng',
       })
@@ -386,7 +386,7 @@ describe('Article Endpoints', () => {
 
   it('updateArticle method (PATCH) should return ERROR if any value is missing', (done) => {
     chai.request(server)
-      .post('/api/v1/articles/1')
+      .patch('/api/v1/articles/1')
       .send({
         authorId: 1,
         title: '',
@@ -406,11 +406,107 @@ describe('Article Endpoints', () => {
   
   it('updateArticle method (POST) should return ERROR if article is NOT FOUND', (done) => {
     chai.request(server)
-      .post('/api/v1/articles/100000')
+      .patch('/api/v1/articles/100000')
       .send({
         authorId: 1,
         title: `Test Edition`,
         article: 'This is one of the test edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+    // Test deleteArticle Endpoints
+  it('deleteArticle method (DELETE) should exist', () => {
+    ArticleController.deleteArticle.should.exist;
+  });
+
+  it('deleteArticle method (DELETE) should delete an article', (done) => {
+    chai.request(server)
+      .delete('/api/v1/articles/1')
+      .send({
+        authorId: 1,
+      })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        res.body.data.should.have.property('message');
+      });
+    done();
+  });
+
+  it('deleteArticle method (DELETE) should return ERROR if articleId is not a number', (done) => {
+    chai.request(server)
+      .delete('/api/v1/articles/a')
+      .send({
+        authorId: 1,
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('deleteArticle method (PATCH) should return ERROR if authorId is not a number', (done) => {
+    chai.request(server)
+      .delete('/api/v1/articles/1')
+      .send({
+        authorId: 'a',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('deleteArticle method (PATCH) should return ERROR if any value is missing', (done) => {
+    chai.request(server)
+      .delete('/api/v1/articles/1')
+      .send({
+        authorId: '',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+  
+  it('deleteArticle method (POST) should return ERROR if article is NOT FOUND', (done) => {
+    chai.request(server)
+      .delete('/api/v1/articles/100000')
+      .send({
+        authorId: 1,
       })
       .end((err, res) => {
         res.should.have.status(400);

@@ -7,6 +7,8 @@ const router = express.Router();
 router.post('/', ArticleController.createArticle);
 
 router.patch('/:articleId', ArticleController.updateArticle);
+
+router.delete('/:articleId', ArticleController.deleteArticle);
  
 
 export default router;

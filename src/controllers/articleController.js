@@ -102,6 +102,39 @@ class ArticleController {
     });
   }
 
+
+  
+  static async deleteArticle(req, res) {
+    const { articleId } = req.params;
+    let authorId = req.body.authorId;
+
+    if (authorId === undefined) {
+          return res.status(400).json({
+            status: 'error',  
+            error: 'authorId not supplied',
+        });
+    }
+      authorId = parseInt(authorId, 10);
+
+    if (isNaN(articleId)) return res.status(400).json({ status: 'error', error: 'ArticleId must be a number'});
+    if (isNaN(authorId)) return res.status(400).json({ status: 'error', error: 'AuthorId must be a number'});
+
+    const articleExist = await ArticleModel.findByJoinEmployees(`articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
+    if (articleExist) {
+      if (articleExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with article' });
+      if (articleExist.length < 1) return res.status(400).json({ status: 'error', error: 'Article not found' });
+    }
+    console.log('article exist', articleExist[0]);
+    const articleDeleted = await ArticleModel.delete(`articleid=${articleId}`);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        message: 'Article successfully deleted'
+      }
+    });
+  }
+
 } 
 
 
