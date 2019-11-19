@@ -20,7 +20,7 @@ gulp.task('watch', gulp.parallel((done) => {
 gulp.task('connect', (done) => {
     connect.server({
         root: 'build/',
-        port: 4000,
+        port: 3000,
         livereload: true
     });
     done(); 

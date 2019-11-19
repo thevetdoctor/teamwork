@@ -56,11 +56,11 @@ app.get('/', (req, res, next) => {
 
 const port = process.env.PORT || 3000;
 
-(async function() {
-// await db.query('delete from team where id=1 returning *')
-await db.query('select * from team')
-.then(res => console.log(res.rows));
-})();
+// (async function() {
+// // await db.query('delete from team where id=1 returning *')
+// await db.query('select * from team')
+// .then(res => console.log(res.rows));
+// })();
 
 
 app.listen(port, () => {
