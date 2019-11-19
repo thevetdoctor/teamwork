@@ -217,99 +217,211 @@ describe('Employee Endpoints', () => {
       });
     done();
   });
-
-
-  describe('Article Endpoints', () => {
-    it('ArticleController should exist', () => {
-      ArticleController.should.exist;
-    });
   
-    it('createArticle  method (POST) should exist', () => {
-      ArticleController.createArticle.should.exist;
-    });
-  
-    it('createArticle method (POST) should create a new employee user account', (done) => {
-      chai.request(server)
-        .post('/api/v1/articles')
-        .send({
-          authorId: 1,
-          title: `Test Edition${count}`,
-          article: 'This is one of the test edition articles, published by @animalworldng',
-        })
-        .end((err, res) => {
-          res.should.have.status(201);
-          res.should.be.json;
-          res.body.should.be.a('object');
-          res.body.should.have.property('status');
-          res.body.status.should.be.a('string');
-          res.body.should.have.property('data');
-          res.body.data.should.be.a('object');
-          res.body.data.should.have.property('message');
-          res.body.data.should.have.property('articleId');
-          res.body.data.should.have.property('createdOn');
-          res.body.data.should.have.property('title');
-        });
-      done();
-    });
+});
 
-    it('createArticle method (POST) should return ERROR if any value is missing', (done) => {
-      chai.request(server)
-        .post('/api/v1/articles')
-        .send({
-          authorId: 1,
-          title: '',
-          article: 'This is one of the test edition articles, published by @animalworldng',
-        })
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.should.be.json;
-          res.body.should.be.a('object');
-          res.body.should.have.property('status');
-          res.body.status.should.be.a('string');
-          res.body.should.have.property('error');
-          res.body.error.should.be.a('string');
-        });
-      done();
-    });
-    it('createArticle method (POST) should return ERROR if author NOT FOUND', (done) => {
-      chai.request(server)
-        .post('/api/v1/articles')
-        .send({
-          authorId: 0,
-          title: `Test Edition${count + 1}`,
-          article: 'This is one of the test edition articles, published by @animalworldng',
-        })
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.should.be.json;
-          res.body.should.be.a('object');
-          res.body.should.have.property('status');
-          res.body.status.should.be.a('string');
-          res.body.should.have.property('error');
-          res.body.error.should.be.a('string');
-        });
-      done();
-    });
-    it('createArticle method (POST) should return ERROR if article already exists', (done) => {
-      chai.request(server)
-        .post('/api/v1/articles')
-        .send({
-          authorId: 1,
-          title: `Test Edition${count}`,
-          article: 'This is one of the test edition articles, published by @animalworldng',
-        })
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.should.be.json;
-          res.body.should.be.a('object');
-          res.body.should.have.property('status');
-          res.body.status.should.be.a('string');
-          res.body.should.have.property('error');
-          res.body.error.should.be.a('string');
-        });
-      done();
-    });
-    
+
+describe('Article Endpoints', () => {
+  it('ArticleController should exist', () => {
+    ArticleController.should.exist;
   });
 
+  it('createArticle  method (POST) should exist', () => {
+    ArticleController.createArticle.should.exist;
+  });
+
+  it('createArticle method (POST) should create article with title & article', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles')
+      .send({
+        authorId: 1,
+        title: `Test Edition${count}`,
+        article: 'This is one of the test edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        res.body.data.should.have.property('message');
+        res.body.data.should.have.property('articleId');
+        res.body.data.should.have.property('createdOn');
+        res.body.data.should.have.property('title');
+      });
+    done();
+  });
+
+  it('createArticle method (POST) should return ERROR if any value is missing', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles')
+      .send({
+        authorId: 1,
+        title: '',
+        article: 'This is one of the test edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('createArticle method (POST) should return ERROR if author NOT FOUND', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles')
+      .send({
+        authorId: 0,
+        title: `Test Edition${count + 1}`,
+        article: 'This is one of the test edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('createArticle method (POST) should return ERROR if article already exists', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles')
+      .send({
+        authorId: 1,
+        title: `Test Edition${count}`,
+        article: 'This is one of the test edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+  
+
+    // Test updateArticle Endpoints
+  it('updateArticle method (PATCH) should exist', () => {
+    ArticleController.updateArticle.should.exist;
+  });
+
+  it('updateArticle method (PATCH) should update article with title & article', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/1')
+      .send({
+        authorId: 1,
+        title: `Test Update Edition${count}`,
+        article: 'This is one of the test update edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        res.body.data.should.have.property('message');
+        res.body.data.should.have.property('title');
+        res.body.data.should.have.property('article');
+        res.body.data.should.have.property('lastUpdated');
+      });
+    done();
+  });
+
+  it('updateArticle method (PATCH) should return ERROR if articleId is not a number', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/a')
+      .send({
+        authorId: 1,
+        title: `Test Update Edition${count}`,
+        article: 'This is one of the test edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('updateArticle method (PATCH) should return ERROR if authorId is not a number', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/1')
+      .send({
+        authorId: a,
+        title: `Test Update Edition${count}`,
+        article: 'This is one of the test edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('updateArticle method (PATCH) should return ERROR if any value is missing', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/1')
+      .send({
+        authorId: 1,
+        title: '',
+        article: 'This is one of the test edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+  
+  it('updateArticle method (POST) should return ERROR if article is NOT FOUND', (done) => {
+    chai.request(server)
+      .post('/api/v1/articles/100000')
+      .send({
+        authorId: 1,
+        title: `Test Edition`,
+        article: 'This is one of the test edition articles, published by @animalworldng',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+  
 });
