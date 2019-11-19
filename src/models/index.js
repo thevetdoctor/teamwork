@@ -11,38 +11,26 @@ export default class BaseModel {
   static async find(position, order) {
     let obj = this.name;
     obj = obj.replace('Model', 's').toLowerCase();
-    console.log(obj, position, order);
-    // try {
+    // console.log(obj, position, order);
     const res = await db.query(...findQuery(obj, position, order))
       .then(result => result.rows)
       .catch(err => {
         return 'Error found here!', err.message;
       });
-    // console.log('fantastic', res);
-    // return res;
-    // } catch(err) {
-    // console.log('Error with try catch');
-    // }
     return res;
   }
 
-  static async findByJoinEmployees(on, position) {
+  static async findByJoin(joinTable, on, position) {
     let obj = this.name;
     obj = obj.replace('Model', 's').toLowerCase();
-    console.log(obj, on, position);
-    // try {
-    // const res = await db.query(...findQuery(obj, position, order))
-    let joinQuery = `SELECT * FROM ${obj} INNER JOIN employees ON ${on} WHERE ${position}`;
+    // console.log(obj, on, position);
+    let joinQuery = `SELECT * FROM ${obj} INNER JOIN ${joinTable} ON ${on} WHERE ${position}`;
     const res = await db.query(joinQuery)
       .then(result => result.rows)
       .catch(err => {
         return 'Error found here!', err.message;
       });
-    console.log('join query', joinQuery, 'result', res);
-    // return res;
-    // } catch(err) {
-    // console.log('Error with try catch');
-    // }
+    // console.log('join query', joinQuery, 'result', res);
     return res;
   }
 
@@ -51,17 +39,11 @@ export default class BaseModel {
     let obj = this.name;
     obj = obj.replace('Model', 's').toLowerCase();
     // console.log(obj);
-    // try {
     const res = await db.query(...deleteQuery(obj, position))
       .then(result => result.rows)
       .catch(err => {
         return 'Error found here!', err.message;
       });
-    // console.log(res);
-    // return res;
-    // } catch(err) {
-    // console.log('Error with try catch');
-    // }
     return res;
   }
 
@@ -69,17 +51,11 @@ export default class BaseModel {
     let obj = this.name;
     obj = obj.replace('Model', 's').toLowerCase();
     // console.log(obj);
-    // try {
     const res = await db.query(...updateQuery(obj, position, condition, by))
       .then(result => result.rows)
       .catch(err => {
         return 'Error found here!', err.message;
       });
-    // console.log(res);
-    // return res;
-    // } catch (err) {
-    // console.log('Error with try catch');
-    // }
     return res;
   }
 

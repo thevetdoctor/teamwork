@@ -63,7 +63,7 @@ class EmployeeController {
 
     let signinDetails = { email, password };
     const missingValue = Object.keys(signinDetails).filter(item => signinDetails[item] === undefined);
-    console.log('missing value', missingValue);
+    // console.log('missing value', missingValue);
     if (missingValue.length > 0) {
       return res.status(400).json({
         status: 'error',

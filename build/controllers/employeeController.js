@@ -151,11 +151,10 @@ function () {
               };
               missingValue = Object.keys(signinDetails).filter(function (item) {
                 return signinDetails[item] === undefined;
-              });
-              console.log('missing value', missingValue);
+              }); // console.log('missing value', missingValue);
 
               if (!(missingValue.length > 0)) {
-                _context2.next = 6;
+                _context2.next = 5;
                 break;
               }
 
@@ -164,20 +163,20 @@ function () {
                 error: "".concat(missingValue, " not supplied")
               }));
 
-            case 6:
-              _context2.next = 8;
+            case 5:
+              _context2.next = 7;
               return regeneratorRuntime.awrap(_employeeModel["default"].find("email=".concat(email)));
 
-            case 8:
+            case 7:
               emailExist = _context2.sent;
 
               if (!emailExist) {
-                _context2.next = 14;
+                _context2.next = 13;
                 break;
               }
 
               if (!(emailExist.indexOf('not') >= 0)) {
-                _context2.next = 12;
+                _context2.next = 11;
                 break;
               }
 
@@ -186,9 +185,9 @@ function () {
                 error: 'Some error found with email'
               }));
 
-            case 12:
+            case 11:
               if (!(emailExist.length < 1)) {
-                _context2.next = 14;
+                _context2.next = 13;
                 break;
               }
 
@@ -197,11 +196,11 @@ function () {
                 error: 'User not registered'
               }));
 
-            case 14:
+            case 13:
               compared = _bcrypt["default"].compareSync(password, emailExist[0].password);
 
               if (compared) {
-                _context2.next = 17;
+                _context2.next = 16;
                 break;
               }
 
@@ -210,7 +209,7 @@ function () {
                 error: 'Password is Invalid'
               }));
 
-            case 17:
+            case 16:
               tokenDetails = {
                 id: emailExist[0].userid,
                 firstName: emailExist[0].firstname,
@@ -231,7 +230,7 @@ function () {
                 }
               }));
 
-            case 20:
+            case 19:
             case "end":
               return _context2.stop();
           }

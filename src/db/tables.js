@@ -29,6 +29,7 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                     CREATE TABLE IF NOT EXISTS comments(
                                                   commentId SERIAL PRIMARY KEY,
                                                   authorId INT NOT NULL,
+                                                  articleId INT NOT NULL,
                                                   comment TEXT NOT NULL,
                                                   createdOn TIME WITH TIME ZONE DEFAULT NOW()
                                                 );`;
