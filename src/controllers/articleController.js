@@ -49,10 +49,59 @@ class ArticleController {
         
         return res.status(201).json({
             status: 'success',
-          data,
-        });
+            data,
+         });
       }
     
+
+      
+  static async updateArticle(req, res) {
+    const { title, article } = req.body;
+    let { authorId } = req.body;
+    // authorId = parseInt(authorId, 10);
+    const articleId = parseInt(req.params.articleId, 10);
+    // console.log(authorId, req.body, req.params);
+
+    const articleToBeUpdated = new ArticleModel(authorId, title, article);
+    console.log(articleToBeUpdated);
+
+    const missingValue = Object.keys(articleToBeUpdated)
+                              .filter(item => ((articleToBeUpdated[item] === undefined) || articleToBeUpdated[item] === ''));
+    // console.log('missing value', missingValue);
+
+    if (isNaN(articleId)) return res.status(400).json({ status: 'error', error: 'ArticleId must be a number'});
+    if (isNaN(authorId)) return res.status(400).json({ status: 'error', error: 'AuthorId must be a number'});
+
+    if (missingValue.length > 0) {
+          return res.status(400).json({
+            status: 'error',  
+            error: `${missingValue} not supplied`,
+        });
+    }
+
+    const articleExist = await ArticleModel.findByJoinEmployees(`articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
+    if (articleExist) {
+      if (articleExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with article' });
+      if (articleExist.length < 1) return res.status(400).json({ status: 'error', error: 'Article not found' });
+    }
+
+    const updatedArticle = await ArticleModel.update(`title=${title}&article=${article}`, `articleid=${articleId}`);
+    if (updatedArticle.indexOf('not') >= 0) {
+      return res.status(400).json({ error: 'Some error found with updated answer' });
+    }
+
+    const data = {
+      message: 'Article successfully updated',
+      title: updatedArticle[0].title,
+      article: updatedArticle[0].article,
+      lastUpdated: updatedArticle[0].lastupdated,
+    }
+    return res.status(200).json({
+      status: 'success',
+      data,
+    });
+  }
+
 } 
 
 

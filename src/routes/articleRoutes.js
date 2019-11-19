@@ -6,5 +6,7 @@ const router = express.Router();
 
 router.post('/', ArticleController.createArticle);
 
+router.patch('/:articleId', ArticleController.updateArticle);
+ 
 
 export default router;
