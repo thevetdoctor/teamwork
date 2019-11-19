@@ -1,5 +1,10 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
 var _express = _interopRequireDefault(require("express"));
 
 var _path = _interopRequireDefault(require("path"));
@@ -21,9 +26,10 @@ var app = (0, _express["default"])(); // app.use(require('connect-livereload'));
 
 app.use(_express["default"]["static"](_path["default"].join(__dirname, 'public')));
 app.use(_bodyParser["default"].urlencoded({
-  extended: false
+  extended: true
 }));
 app.use(_bodyParser["default"].json());
+(0, _routes["default"])(app);
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', '*');
@@ -40,30 +46,20 @@ app.use(function (error, req, res, next) {
   res.status(500).send('Something broke!');
   next();
 });
-app.use('/api/v1', _routes["default"]);
+app.get('/api/v1', function (req, res, next) {
+  res.send('<div style=\'text-align: center;\'><h1>Welcome to Teamwork</h1><h3>... where teams actually WORK!</h3></div>');
+});
 app.get('/', function (req, res, next) {
   res.send("<div style='text-align: center;'>\n                <h1>Looking for Teamwork ?</h1>\n                <h3> <a href='/api/v1'>Click here!</a></h3>\n            </div>");
 });
-var port = process.env.PORT || 3000;
-
-(function _callee() {
-  return regeneratorRuntime.async(function _callee$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          _context.next = 2;
-          return regeneratorRuntime.awrap(_db["default"].query('select * from team').then(function (res) {
-            return console.log(res.rows);
-          }));
-
-        case 2:
-        case "end":
-          return _context.stop();
-      }
-    }
-  });
-})();
+var port = process.env.PORT || 3000; // (async function() {
+// // await db.query('delete from team where id=1 returning *')
+// await db.query('select * from team')
+// .then(res => console.log(res.rows));
+// })();
 
 app.listen(port, function () {
   console.log("Server running on ".concat(port));
 });
+var _default = app;
+exports["default"] = _default;

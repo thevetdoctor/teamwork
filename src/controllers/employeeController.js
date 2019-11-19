@@ -32,17 +32,20 @@ class EmployeeController {
     employee.password = bcrypt.hashSync(employee.password, 10);
 
     const newemployee = await employee.save();
-    console.log('new user', newemployee);
+    // console.log('new user', newemployee);
     if (newemployee.indexOf('not') >= 0) {
       return res.status(400).json({ error: 'Some error found with storing data' });
     }
-    console.log('displayed employee', displayedEmployee);
-    const displayedEmployee = { 
+    const tokenDetails = { 
                                 id: newemployee[0].userid,
-                                name: newemployee[0].firstname,
+                                firstName: newemployee[0].firstname,
+                                lastName: newemployee[0].lastname,
                                 email: newemployee[0].email,
+                                isadmin: newemployee[0].isadmin,
                               };
-    const token = jwt.sign({ displayedEmployee }, process.env.SECRET, { expiresIn: '2h' });
+    const token = jwt.sign({ tokenDetails }, process.env.SECRET, { expiresIn: '2h' });
+    // console.log('token details', tokenDetails);
+
 
     return res.status(201).json({
         status: 'success',
@@ -80,14 +83,14 @@ class EmployeeController {
       return res.status(400).json({ status: 'error', error: 'Password is Invalid' });
     }
 
-    const displayedEmployee = { 
+    const tokenDetails = { 
                               id: emailExist[0].userid,
                               firstName: emailExist[0].firstname,
                               lastName: emailExist[0].lastname,
                               email: emailExist[0].email,
-                              is_admin: emailExist[0].is_admin,
+                              isAdmin: emailExist[0].isadmin,
                             };
-    const token = jwt.sign({ displayedEmployee }, process.env.SECRET, { expiresIn: '2h' });
+    const token = jwt.sign({ tokenDetails }, process.env.SECRET, { expiresIn: '2h' });
 
     return res.status(200).json({
       status: 'success',

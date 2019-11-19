@@ -13,6 +13,6 @@ const migrate = async() => {
     }
 };
 
-// migrate().then(result => console.log('Tables created')).catch(e => console.log(e));
+migrate().then(result => console.log('Tables created')).catch(e => console.log(e));
 
 export default migrate;
