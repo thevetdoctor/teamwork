@@ -9,6 +9,7 @@ var _pg = require("pg");
 
 require("dotenv/config");
 
+var elephantSql = 'postgres://aikuwuqy:VwJSaP-pOdEc--_ZNpS-g2zHekiTgLJK@raja.db.elephantsql.com:5432/aikuwuqy';
 var dbUrl = {
   host: process.env.HOST,
   user: process.env.USER,
@@ -26,8 +27,9 @@ var dbUrlTest = {
 console.log('NODE_ENV', process.env.NODE_ENV);
 var db;
 
-if (process.env.NODE_ENV === 'test') {
-  db = new _pg.Client(dbUrlTest);
+if (process.env.NODE_ENV !== 'test') {
+  // db = new Client(dbUrlTest);
+  db = new _pg.Client(elephantSql);
   console.log('Environment => Testing');
 } else {
   db = new _pg.Client(dbUrl); // db = new Client(process.env.DATABASE_URL);

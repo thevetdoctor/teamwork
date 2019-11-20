@@ -14,6 +14,8 @@ var _employeeController = _interopRequireDefault(require("../controllers/employe
 
 var _articleController = _interopRequireDefault(require("../controllers/articleController"));
 
+var _gifController = _interopRequireDefault(require("../controllers/gifController"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -32,6 +34,20 @@ describe('Test Endpoints', function () {
   });
   it('test method (GET) should exist', function () {
     _controllers["default"].test.should.exist;
+  });
+  it('test method (GET) should exist', function (done) {
+    _chai["default"].request(_main["default"]).get('/api/v1/test').end(function (err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('data');
+      res.body.data.should.be.a('object');
+      res.body.data.should.have.property('test');
+    });
+
+    done();
   });
 });
 describe('Employee Endpoints', function () {
@@ -529,6 +545,176 @@ describe('Article Endpoints', function () {
     _chai["default"].request(_main["default"]).post('/api/v1/articles/100000/comment').send({
       authorId: 1,
       comment: 'latest comment'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  });
+}); // Test createGif Endpoints
+
+describe('GIF Endpoints', function () {
+  it('GifController should exist', function () {
+    _gifController["default"].should.exist;
+  }); // it('createGif method (POST) should exist', () => {
+  //   GifController.createGif.should.exist;
+  // });
+  // it('createGif method (POST) should create gif post with title & image(Url)', (done) => {
+  //   chai.request(server)
+  //     .post('/api/v1/gifs')
+  //     .send({
+  //       authorId: 1,
+  //       title: `Test Edition${count}`,
+  //       image: '',
+  //     })
+  //     .end((err, res) => {
+  //       res.should.have.status(201);
+  //       res.should.be.json;
+  //       res.body.should.be.a('object');
+  //       res.body.should.have.property('status');
+  //       res.body.status.should.be.a('string');
+  //       res.body.should.have.property('data');
+  //       res.body.data.should.be.a('object');
+  //       res.body.data.should.have.property('gifId');
+  //       res.body.data.should.have.property('message');
+  //       res.body.data.should.have.property('createdOn');
+  //       res.body.data.should.have.property('title');
+  //       res.body.data.should.have.property('imageUrl');
+  //     });
+  //   done();
+  // });
+  // it('createGif method (POST) should return ERROR if any value is missing', (done) => {
+  //   chai.request(server)
+  //     .post('/api/v1/gifs')
+  //     .send({
+  //       authorId: 1,
+  //       title: '',
+  //       image: '',
+  //     })
+  //     .end((err, res) => {
+  //       res.should.have.status(400);
+  //       res.should.be.json;
+  //       res.body.should.be.a('object');
+  //       res.body.should.have.property('status');
+  //       res.body.status.should.be.a('string');
+  //       res.body.should.have.property('error');
+  //       res.body.error.should.be.a('string');
+  //     });
+  //   done();
+  // });
+  // it('createGif method (POST) should return ERROR if author NOT FOUND', (done) => {
+  //   chai.request(server)
+  //     .post('/api/v1/gifs')
+  //     .send({
+  //       authorId: 0,
+  //       title: `Test Edition${count + 1}`,
+  //       image: '',
+  //     })
+  //     .end((err, res) => {
+  //       res.should.have.status(400);
+  //       res.should.be.json;
+  //       res.body.should.be.a('object');
+  //       res.body.should.have.property('status');
+  //       res.body.status.should.be.a('string');
+  //       res.body.should.have.property('error');
+  //       res.body.error.should.be.a('string');
+  //     });
+  //   done();
+  // });
+  // it('createGif method (POST) should return ERROR if gif post already exists', (done) => {
+  //   chai.request(server)
+  //     .post('/api/v1/gifs')
+  //     .send({
+  //       authorId: 1,
+  //       title: `Test Edition${count}`,
+  //       image: '',
+  //     })
+  //     .end((err, res) => {
+  //       res.should.have.status(400);
+  //       res.should.be.json;
+  //       res.body.should.be.a('object');
+  //       res.body.should.have.property('status');
+  //       res.body.status.should.be.a('string');
+  //       res.body.should.have.property('error');
+  //       res.body.error.should.be.a('string');
+  //     });
+  //   done();
+  // });
+  // Test deleteGif Endpoints
+
+  it('deleteGif method (DELETE) should exist', function () {
+    _gifController["default"].deleteGif.should.exist;
+  });
+  it('deleteGif method (DELETE) should delete an article', function (done) {
+    _chai["default"].request(_main["default"])["delete"]('/api/v1/gifs/1').send({
+      authorId: 1
+    }).end(function (err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('data');
+      res.body.data.should.be.a('object');
+      res.body.data.should.have.property('message');
+    });
+
+    done();
+  });
+  it('deleteGif method (DELETE) should return ERROR if gifId is not a number', function (done) {
+    _chai["default"].request(_main["default"])["delete"]('/api/v1/gifs/a').send({
+      authorId: 1
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  });
+  it('deleteGif method (DELETE) should return ERROR if authorId is not a number', function (done) {
+    _chai["default"].request(_main["default"])["delete"]('/api/v1/gifs/1').send({
+      authorId: 'a'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  });
+  it('deleteGif method (DELETE) should return ERROR if any value is missing', function (done) {
+    _chai["default"].request(_main["default"])["delete"]('/api/v1/gifs/1').send({
+      authorId: ''
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  });
+  it('deleteGif method (DELETE) should return ERROR if GIF is NOT FOUND', function (done) {
+    _chai["default"].request(_main["default"])["delete"]('/api/v1/gifs/100000').send({
+      authorId: 1
     }).end(function (err, res) {
       res.should.have.status(400);
       res.should.be.json;
