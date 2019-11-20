@@ -1,6 +1,9 @@
 import { Client } from 'pg';
 import 'dotenv/config';
 
+
+const elephantSql = 'postgres://aikuwuqy:VwJSaP-pOdEc--_ZNpS-g2zHekiTgLJK@raja.db.elephantsql.com:5432/aikuwuqy';
+
 const dbUrl = {
   host: process.env.HOST,
   user: process.env.USER,
@@ -22,8 +25,9 @@ console.log('NODE_ENV', process.env.NODE_ENV);
 
 let db;
 
-if (process.env.NODE_ENV === 'test') {
-  db = new Client(dbUrlTest);
+if (process.env.NODE_ENV !== 'test') {
+  // db = new Client(dbUrlTest);
+  db = new Client(elephantSql);
   console.log('Environment => Testing');
 } else {
   db = new Client(dbUrl);
