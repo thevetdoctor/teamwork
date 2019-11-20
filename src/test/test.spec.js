@@ -537,7 +537,7 @@ describe('Article Endpoints', () => {
     done();
   });
 
-    // Test createComment Endpoints
+    // Test createComment on articles Endpoints
   it('createComment method (POST) should exist', () => {
     ArticleController.createComment.should.exist;
   });
@@ -558,6 +558,9 @@ describe('Article Endpoints', () => {
         res.body.should.have.property('data');
         res.body.data.should.be.a('object');
         res.body.data.should.have.property('message');
+        res.body.data.should.have.property('createdOn');
+        res.body.data.should.have.property('articleTitle');
+        res.body.data.should.have.property('article');
       });
     done();
   });
@@ -833,4 +836,108 @@ describe('GIF Endpoints', () => {
     done();
   });
 
+    // Test createComment on GIF Endpoints
+    it('createComment method (POST) should exist', () => {
+      GifController.createComment.should.exist;
+    });
+  
+    it('createComment method (POST) should create a comment for a specific gif post', (done) => {
+      chai.request(server)
+        .post('/api/v1/gifs/1/comment')
+        .send({
+          authorId: 1,
+          comment: 'latest gif comment',
+        })
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.status.should.be.a('string');
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('object');
+          res.body.data.should.have.property('message');
+          res.body.data.should.have.property('createdOn');
+          res.body.data.should.have.property('gifTitle');
+          res.body.data.should.have.property('comment');
+        });
+      done();
+    });
+  
+    it('createComment method (POST) should return ERROR if gifId is not a number', (done) => {
+      chai.request(server)
+        .post('/api/v1/gifs/a/comment')
+        .send({
+          authorId: 1,
+          comment: 'latest comment',
+        })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.status.should.be.a('string');
+          res.body.should.have.property('error');
+          res.body.error.should.be.a('string');
+        });
+      done();
+    });
+  
+    it('createComment method (POST) should return ERROR if authorId is not a number', (done) => {
+      chai.request(server)
+        .post('/api/v1/gifs/1/comment')
+        .send({
+          authorId: 'a',
+          comment: 'latest comment',
+        })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.status.should.be.a('string');
+          res.body.should.have.property('error');
+          res.body.error.should.be.a('string');
+        });
+      done();
+    });
+  
+    it('createComment method (POST) should return ERROR if any value is missing', (done) => {
+      chai.request(server)
+        .post('/api/v1/gifs/1/comment')
+        .send({
+          authorId: '',
+          comment: 'latest comment',
+        })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.status.should.be.a('string');
+          res.body.should.have.property('error');
+          res.body.error.should.be.a('string');
+        });
+      done();
+    });
+    
+    it('createComment method (POST) should return ERROR if gif post is NOT FOUND', (done) => {
+      chai.request(server)
+        .post('/api/v1/gifs/100000/comment')
+        .send({
+          authorId: 1,
+          comment: 'latest comment',
+        })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.status.should.be.a('string');
+          res.body.should.have.property('error');
+          res.body.error.should.be.a('string');
+        });
+      done();
+    });
+    
 });

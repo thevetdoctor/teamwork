@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.delete('/:gifId', GifController.deleteGif);
 
- 
+router.post('/:gifId/comment', GifController.createComment);
+
 
 export default router;

@@ -4,10 +4,10 @@ import { saveQuery } from '../db/query';
 
 
 class CommentModel extends BaseModel {
-  constructor(authorId, articleId, comment) {
+  constructor(authorId, gifarticleId, comment) {
     super();
     this.authorId = authorId;
-    this.articleId = articleId;
+    this.gifarticleId = gifarticleId;
     this.comment = comment;
   }
 
