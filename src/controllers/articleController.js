@@ -172,7 +172,7 @@ class ArticleController {
       }
       // console.log('article exist', articleExist[0]);
 
-      const commentExist = await CommentModel.findByJoin('articles', `comments.articleid=articles.articleid`, `articles.articleid=${articleId} AND comments.comment='${comment}'`);
+      const commentExist = await CommentModel.findByJoin('articles', `comments.gifarticleid=articles.articleid`, `articles.articleid=${articleId} AND comments.comment='${comment}'`);
       // console.log('comment exist', commentExist);
 
       if (commentExist) {
@@ -184,7 +184,8 @@ class ArticleController {
       if (newComment.indexOf('not') >= 0) {
         return res.status(400).json({ error: 'Some error found with new comment' });
       }
-
+      console.log(newComment[0]);
+      
       const data = {
         message: 'Comment successfully created',
         createdOn: newComment[0].createdon,

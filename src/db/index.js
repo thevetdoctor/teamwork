@@ -21,17 +21,20 @@ const dbUrlTest = {
 };
 
 
-console.log('NODE_ENV', process.env.NODE_ENV);
+console.log('NODE_ENV', process.env.NODE_ENV, process.env.COMPUTERNAME);
 
 let db;
 
-if (process.env.NODE_ENV !== 'test') {
-  // db = new Client(dbUrlTest);
-  db = new Client(elephantSql);
-  console.log('Environment => Testing');
+if (process.env.NODE_ENV === 'test ') {
+   if(process.env.COMPUTERNAME === 'ACER-PC') {
+      db = new Client(dbUrlTest);
+      console.log('Environment => Testing Local');
+    } else {
+      db = new Client(elephantSql);
+      console.log('Environment => Testing Cloud');
+    }
 } else {
   db = new Client(dbUrl);
-  // db = new Client(process.env.DATABASE_URL);
   console.log('Environment => Development');
 }
 
