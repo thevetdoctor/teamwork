@@ -5,7 +5,14 @@ class FeedController {
     // get feed of articles & gif posts
 
     static async getFeed(req, res) {
-
+        const { authorId } = req.body;
+        
+        if (authorId === undefined) {
+            return res.status(400).json({
+              status: 'error',  
+              error: 'authorId not supplied',
+            });
+          }
         const gifarticles = await db.query('SELECT * FROM articles UNION SELECT  * FROM gifs ORDER BY lastupdated DESC')
                                     .then(result => result.rows)
                                     .catch(err => {
