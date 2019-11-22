@@ -209,6 +209,7 @@ class ArticleController {
     //     error: 'authorId not supplied',
     //   });
     // }
+    
 
     console.log(articleId, req.params, req.query);
     const regExp = 'category';
