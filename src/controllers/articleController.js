@@ -184,7 +184,7 @@ class ArticleController {
       if (newComment.indexOf('not') >= 0) {
         return res.status(400).json({ error: 'Some error found with new comment' });
       }
-      console.log(newComment[0]);
+      // console.log(newComment[0]);
       
       const data = {
         message: 'Comment successfully created',
@@ -196,6 +196,78 @@ class ArticleController {
       return res.status(201).json({
         data,
       });
+  }
+
+
+  static async getArticleById(req, res) {
+    const { authorId } = req.body;
+    const { articleId } = req.params;
+
+    // if (authorId === undefined) {
+    //   return res.status(400).json({
+    //     status: 'error',  
+    //     error: 'authorId not supplied',
+    //   });
+    // }
+
+    console.log(articleId, req.params, req.query);
+    const regExp = 'category';
+    console.log(regExp.includes(articleId));
+    // if (regExp.includes(articleId)) {
+    //   return res.status(400).json({
+    //       status: 'error',
+    //       error: 'Parameter should be \'category\''
+    //   });
+    // }
+  if (articleId === 'category') {
+      
+      const { searchQuery } = req.query;
+      console.log('search query', searchQuery);
+
+      if (searchQuery === undefined) {
+        return res.status(400).json({
+          status: 'error',  
+          error: 'search query not supplied',
+        });
+      }
+      const searchResult = await ArticleModel.search(`article=${searchQuery}`);
+      console.log('search result', searchResult);
+
+      return res.status(200).json({
+        status: 'success',
+        data: searchResult,
+      });
+  } else {
+        if (isNaN(articleId)) {
+          return res.status(400).json({ status: 'error', message: 'Invalid article ID' });
+        }
+
+        const articleFound = await ArticleModel.find(`articleid=${articleId}`);
+        if (articleFound.length < 1) return res.status(400).json({ status: 'error', message: 'Article not found' });
+
+        const commentsByArticle = await CommentModel.find(`gifarticleid=${articleId}&type=article`, 'createdon');
+        // let message = 'List of comments';
+        // if (commentsByArticle.length < 1) {
+        //   message = `No comments for article with ID: ${articleId} in record`;
+        // }
+
+        const comments = commentsByArticle.map(item => ({
+                  commentId: item.commentid,
+                  comment: item.comment,
+                  authorId: item.authorid
+        }));
+        const data = {
+          id: articleFound[0].articleid,
+          createdOn: articleFound[0].createdon,
+          title: articleFound[0].title,
+          article: articleFound[0].article,
+          comments
+        };
+        return res.status(200).json({
+          status: 'success',
+          data,
+        });
+    }
   }
 
 } 

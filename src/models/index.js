@@ -1,11 +1,11 @@
 import db from '../db';
-import { findQuery, updateQuery, deleteQuery } from '../db/query';
+import { findQuery, updateQuery, deleteQuery, searchQuery } from '../db/query';
 import 'regenerator-runtime';
 
 export default class BaseModel {
     // constructor() {
     // this.name = name;
-    // }
+    // } 
 
 
   static async find(position, order) {
@@ -58,6 +58,20 @@ export default class BaseModel {
       });
     return res;
   }
+
+  static async search(position, order) {
+    let obj = this.name;
+    obj = obj.replace('Model', 's').toLowerCase();
+    console.log(obj, position, order);
+    const res = await db.query(...searchQuery(obj, position, order))
+      .then(result => result.rows)
+      .catch(err => {
+        return 'Error found here!', err.message;
+      });
+    
+    return res;
+  }
+
 
   
 }

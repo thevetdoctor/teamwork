@@ -20,7 +20,7 @@ const dbUrlTest = {
   port: process.env.TEST_DB_PORT,
 };
 
-
+ 
 console.log('NODE_ENV', process.env.NODE_ENV, process.env.COMPUTERNAME);
 
 let db;

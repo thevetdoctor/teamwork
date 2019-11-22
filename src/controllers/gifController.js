@@ -1,61 +1,72 @@
 import GifModel from '../models/gifModel';
 import CommentModel from '../models/commentModel';
-// import EmployeeModel from '../models/employeeModel';
+import EmployeeModel from '../models/employeeModel';
+import cloud from '../helpers/cloudinary';
 
 
 class GifController {
 // create GIFs
 
-// static async createGif(req, res) {
-//     const { title, imageUrl } = req.body;
-//     // const authorId = parseInt(req.body.authorId, 10);
-//     let authorId = req.body.authorId;
+static async createGif(req, res) {
+    const { title, imageUrl } = req.body;
+  //  console.log(JSON.parse(req.body.thing));
+   console.log(req.body);
+        let authorId = req.body.authorId;
 
-//     const newGif = new GifModel(authorId, title, imageUrl);
-//     // console.log(newGif);
+       const newImageUrl = await cloud.uploads(req.body.imageUrl);
+                                      // // .then(result => { url, id })
+                                      // .then(result => result)
+                                      // .catch(e => console.log(e));
+      
+      console.log('new image url', newImageUrl);
+      
 
-// const missingValue = Object.keys(newGif)
-//                            .filter(item => ((newGif[item] === undefined) || (newGif[item] === '')));
-// // console.log(missingValue);
-// if (missingValue.length > 0) {
-//       return res.status(400).json({
-//         status: 'error',  
-//         error: `${missingValue} not supplied`,
-//     });
-// }
+    const newGif = new GifModel(authorId, title, imageUrl);
+
+const missingValue = Object.keys(newGif)
+                           .filter(item => ((newGif[item] === undefined) || (newGif[item] === '')));
+if (missingValue.length > 0) {
+      return res.status(400).json({
+        status: 'error',  
+        error: `${missingValue} not supplied`,
+    });
+}
+
+    const url = req.protocol + '://' + req.get('host');
+    newGif.imageUrl = url + '/images/' + '';
  
-//     const authorExist = await EmployeeModel.find(`userid=${newGif.authorId}`);
-//     if (authorExist) {
-//       if (authorExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with author' });
-//       if (authorExist.length < 1) return res.status(400).json({ status: 'error', error: 'Author not found' });
-//     }
+    const authorExist = await EmployeeModel.find(`userid=${newGif.authorId}`);
+    if (authorExist) {
+      if (authorExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with author' });
+      if (authorExist.length < 1) return res.status(400).json({ status: 'error', error: 'Author not found' });
+    }
 
-//     const gifExist = await GifModel.find(`title=${newGif.title}`);
-//     // console.log('gif exist', gifExist);
-//     if (gifExist) {
-//       if (gifExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with GIF' });
-//       if (gifExist.length > 0) return res.status(400).json({ status: 'error', error: 'GIF already exists' });
-//     }
+    const gifExist = await GifModel.find(`title=${newGif.title}`);
+    if (gifExist) {
+      if (gifExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with GIF' });
+      if (gifExist.length > 0) return res.status(400).json({ status: 'error', error: 'GIF already exists' });
+    }
 
+    // console.log('new gif', newGif);
   
-//     const createdGif = await newGif.save();
-//     if (createdGif.indexOf('not') >= 0) {
-//       return res.status(400).json({ status: 'error', error: 'Some error found with new GIF' });
-//     }
+    const createdGif = await newGif.save();
+    if (createdGif.indexOf('not') >= 0) {
+      return res.status(400).json({ status: 'error', error: 'Some error found with new GIF' });
+    }
 
-//     const data = {
-//         gifId: createdGif[0].gifId,
-//         message: 'GIF image successfully posted',
-//         createdOn: createdGif[0].createdon,
-//         title: createdGif[0].title,
-//         imageUrl: createdGif[0].imageurl,
-//     }
+    const data = {
+        gifId: createdGif[0].gifId,
+        message: 'GIF image successfully posted',
+        createdOn: createdGif[0].createdon,
+        title: createdGif[0].title,
+        imageUrl: createdGif[0].imageurl,
+    }
     
-//     return res.status(201).json({
-//         status: 'success',
-//         data,
-//      });
-//   }
+    return res.status(201).json({
+        status: 'success',
+        data,
+     });
+  }
      
   
   // Delete GIFs by ID
@@ -133,7 +144,7 @@ static async createComment(req, res) {
       if (newComment.indexOf('not') >= 0) {
         return res.status(400).json({ error: 'Some error found with new comment' });
       }
-      console.log(newComment[0]);
+      // console.log(newComment[0]);
 
       const data = {
         message: 'Comment successfully created',
@@ -144,6 +155,48 @@ static async createComment(req, res) {
       return res.status(201).json({
         data,
       });
+  }
+
+
+  static async getGifById(req, res) {
+    const { authorId } = req.body;
+    const { gifId } = req.params;
+
+    // if (authorId === undefined) {
+    //   return res.status(400).json({
+    //     status: 'error',  
+    //     error: 'authorId not supplied',
+    //   });
+    // }
+    if (isNaN(gifId)) {
+      return res.status(400).json({ status: 'error', message: 'Invalid gif post ID' });
+    }
+
+    const gifFound = await GifModel.find(`gifid=${gifId}`);
+    if (gifFound.length < 1) return res.status(400).json({ status: 'error', message: 'Gif post not found' });
+
+    const commentsByGif = await CommentModel.find(`gifarticleid=${gifId}&type=gif`, 'createdon');
+    // let message = 'List of comments';
+    // if (commentsByArticle.length < 1) {
+    //   message = `No comments for article with ID: ${articleId} in record`;
+    // }
+
+    const comments = commentsByGif.map(item => ({
+              commentId: item.commentid,
+              comment: item.comment,
+              authorId: item.authorid
+    }));
+    const data = {
+      id: gifFound[0].gifid,
+      createdOn: gifFound[0].createdon,
+      title: gifFound[0].title,
+      url: gifFound[0].imageurl,
+      comments
+    };
+    return res.status(200).json({
+      status: 'success',
+      data,
+    });
   }
 
 }

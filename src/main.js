@@ -1,7 +1,6 @@
 import express from 'express';
 import path from 'path';
 import parser from 'body-parser';
-import db from './db';
 import routeHandler from './routes';
 import regenerator from 'regenerator-runtime';
 import migrate from './db/migrations';
@@ -15,6 +14,7 @@ const app = express();
 // app.use(require('connect-livereload'));
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('images', express.static(path.join(__dirname, 'images')));
 app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
  
