@@ -16,7 +16,9 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   authorId INT NOT NULL,
                                                   title TEXT NOT NULL,
                                                   imageUrl VARCHAR(255) NOT NULL,
-                                                  createdOn TIME WITH TIME ZONE DEFAULT NOW()
+                                                  createdOn TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  lastUpdated TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  foreign key(authorId) references employees(userId)
                                                 );
                     CREATE TABLE IF NOT EXISTS articles(
                                                   articleId SERIAL PRIMARY KEY,
@@ -24,7 +26,8 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   title TEXT NOT NULL,
                                                   article TEXT NOT NULL,
                                                   createdOn TIME WITH TIME ZONE DEFAULT NOW(),
-                                                  lastUpdated TIME WITH TIME ZONE DEFAULT NOW()
+                                                  lastUpdated TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  foreign key(authorId) references employees(userId)
                                                 );
                     CREATE TABLE IF NOT EXISTS comments(
                                                   commentId SERIAL PRIMARY KEY,
@@ -32,7 +35,10 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   gifarticleId INT NOT NULL,
                                                   comment TEXT NOT NULL,
                                                   type TEXT DEFAULT 'article',
-                                                  createdOn TIME WITH TIME ZONE DEFAULT NOW()
+                                                  createdOn TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  foreign key(authorId) references employees(userId),
+                                                  foreign key(gifarticleId) references gifs(gifId),
+                                                  foreign key(gifarticleId) references articles(articleId)
                                                 );`;
  
 

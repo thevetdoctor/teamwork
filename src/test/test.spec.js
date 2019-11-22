@@ -39,11 +39,13 @@ describe('Test Endpoints', () => {
   });
 });
 
+    // Test Employee Endpoints
 describe('Employee Endpoints', () => {
   it('EmployeeController should exist', () => {
     EmployeeController.should.exist;
   });
 
+  // Test createUser Endpoints
   it('createUser  method (POST) should exist', () => {
     EmployeeController.createUser.should.exist;
   });
@@ -152,6 +154,7 @@ describe('Employee Endpoints', () => {
     done();
   });
 
+  // Test signIn Endpoints
   it('signIn  method (POST) should exist', () => {
     EmployeeController.signIn.should.exist;
   });
@@ -236,13 +239,13 @@ describe('Employee Endpoints', () => {
   });
   
 });
-
-
+      // Test Article Endpoints
 describe('Article Endpoints', () => {
   it('ArticleController should exist', () => {
     ArticleController.should.exist;
   });
 
+    // Test createArticle Endpoints
   it('createArticle  method (POST) should exist', () => {
     ArticleController.createArticle.should.exist;
   });
@@ -645,100 +648,100 @@ describe('Article Endpoints', () => {
 
 
     // Test createGif Endpoints
-
 describe('GIF Endpoints', () => {
   it('GifController should exist', () => {
     GifController.should.exist;
   });
 
-  // it('createGif method (POST) should exist', () => {
-  //   GifController.createGif.should.exist;
-  // });
+  // Test createGif Endpoints
+  it('createGif method (POST) should exist', () => {
+    GifController.createGif.should.exist;
+  });
 
-  // it('createGif method (POST) should create gif post with title & image(Url)', (done) => {
-  //   chai.request(server)
-  //     .post('/api/v1/gifs')
-  //     .send({
-  //       authorId: 1,
-  //       title: `Test Edition${count}`,
-  //       image: '',
-  //     })
-  //     .end((err, res) => {
-  //       res.should.have.status(201);
-  //       res.should.be.json;
-  //       res.body.should.be.a('object');
-  //       res.body.should.have.property('status');
-  //       res.body.status.should.be.a('string');
-  //       res.body.should.have.property('data');
-  //       res.body.data.should.be.a('object');
-  //       res.body.data.should.have.property('gifId');
-  //       res.body.data.should.have.property('message');
-  //       res.body.data.should.have.property('createdOn');
-  //       res.body.data.should.have.property('title');
-  //       res.body.data.should.have.property('imageUrl');
-  //     });
-  //   done();
-  // });
+  it('createGif method (POST) should create gif post with title & image(Url)', (done) => {
+    chai.request(server)
+      .post('/api/v1/gifs')
+      .send({
+        authorId: 1,
+        title: `Test Edition${count}`,
+        imageUrl: 'testimage',
+      })
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        res.body.data.should.have.property('gifId');
+        res.body.data.should.have.property('message');
+        res.body.data.should.have.property('createdOn');
+        res.body.data.should.have.property('title');
+        res.body.data.should.have.property('imageUrl');
+      });
+    done();
+  });
 
-  // it('createGif method (POST) should return ERROR if any value is missing', (done) => {
-  //   chai.request(server)
-  //     .post('/api/v1/gifs')
-  //     .send({
-  //       authorId: 1,
-  //       title: '',
-  //       image: '',
-  //     })
-  //     .end((err, res) => {
-  //       res.should.have.status(400);
-  //       res.should.be.json;
-  //       res.body.should.be.a('object');
-  //       res.body.should.have.property('status');
-  //       res.body.status.should.be.a('string');
-  //       res.body.should.have.property('error');
-  //       res.body.error.should.be.a('string');
-  //     });
-  //   done();
-  // });
+  it('createGif method (POST) should return ERROR if any value is missing', (done) => {
+    chai.request(server)
+      .post('/api/v1/gifs')
+      .send({
+        authorId: 1,
+        title: '',
+        imageUrl: '',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
 
-  // it('createGif method (POST) should return ERROR if author NOT FOUND', (done) => {
-  //   chai.request(server)
-  //     .post('/api/v1/gifs')
-  //     .send({
-  //       authorId: 0,
-  //       title: `Test Edition${count + 1}`,
-  //       image: '',
-  //     })
-  //     .end((err, res) => {
-  //       res.should.have.status(400);
-  //       res.should.be.json;
-  //       res.body.should.be.a('object');
-  //       res.body.should.have.property('status');
-  //       res.body.status.should.be.a('string');
-  //       res.body.should.have.property('error');
-  //       res.body.error.should.be.a('string');
-  //     });
-  //   done();
-  // });
+  it('createGif method (POST) should return ERROR if author NOT FOUND', (done) => {
+    chai.request(server)
+      .post('/api/v1/gifs')
+      .send({
+        authorId: 0,
+        title: `Test Edition${count + 1}`,
+        imageUrl: 'testimage',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
 
-  // it('createGif method (POST) should return ERROR if gif post already exists', (done) => {
-  //   chai.request(server)
-  //     .post('/api/v1/gifs')
-  //     .send({
-  //       authorId: 1,
-  //       title: `Test Edition${count}`,
-  //       image: '',
-  //     })
-  //     .end((err, res) => {
-  //       res.should.have.status(400);
-  //       res.should.be.json;
-  //       res.body.should.be.a('object');
-  //       res.body.should.have.property('status');
-  //       res.body.status.should.be.a('string');
-  //       res.body.should.have.property('error');
-  //       res.body.error.should.be.a('string');
-  //     });
-  //   done();
-  // });
+  it('createGif method (POST) should return ERROR if gif post already exists', (done) => {
+    chai.request(server)
+      .post('/api/v1/gifs')
+      .send({
+        authorId: 1,
+        title: `Test Edition${count}`,
+        imageUrl: 'testimage',
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('status');
+        res.body.status.should.be.a('string');
+        res.body.should.have.property('error');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
 
    // Test deleteGif Endpoints
    it('deleteGif method (DELETE) should exist', () => {
