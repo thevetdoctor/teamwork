@@ -203,17 +203,17 @@ class ArticleController {
     const { authorId } = req.body;
     const { articleId } = req.params;
 
-    // if (authorId === undefined) {
-    //   return res.status(400).json({
-    //     status: 'error',  
-    //     error: 'authorId not supplied',
-    //   });
-    // }
+    if (authorId === undefined) {
+      return res.status(400).json({
+        status: 'error',  
+        error: 'authorId not supplied',
+      });
+    }
     
 
-    console.log(articleId, req.params, req.query);
+    // console.log(articleId, req.params, req.query);
     const regExp = 'category';
-    console.log(regExp.includes(articleId));
+    // console.log(regExp.includes(articleId));
     // if (regExp.includes(articleId)) {
     //   return res.status(400).json({
     //       status: 'error',
@@ -223,7 +223,7 @@ class ArticleController {
   if (articleId === 'category') {
       
       const { searchQuery } = req.query;
-      console.log('search query', searchQuery);
+      // console.log('search query', searchQuery);
 
       if (searchQuery === undefined) {
         return res.status(400).json({
@@ -232,7 +232,7 @@ class ArticleController {
         });
       }
       const searchResult = await ArticleModel.search(`article=${searchQuery}`);
-      console.log('search result', searchResult);
+      // console.log('search result', searchResult);
 
       return res.status(200).json({
         status: 'success',

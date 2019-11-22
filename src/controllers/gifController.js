@@ -162,12 +162,12 @@ static async createComment(req, res) {
     const { authorId } = req.body;
     const { gifId } = req.params;
 
-    // if (authorId === undefined) {
-    //   return res.status(400).json({
-    //     status: 'error',  
-    //     error: 'authorId not supplied',
-    //   });
-    // }
+    if (authorId === undefined) {
+      return res.status(400).json({
+        status: 'error',  
+        error: 'authorId not supplied',
+      });
+    }
     if (isNaN(gifId)) {
       return res.status(400).json({ status: 'error', message: 'Invalid gif post ID' });
     }
