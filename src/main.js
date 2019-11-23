@@ -43,7 +43,7 @@ app.use((error, req, res, next) => {
 
 app.get('/api/v1', (req, res, next) => {
     
-    res.send('<div style=\'text-align: center;\'><h1>Welcome to Teamwork</h1><h3>... where teams actually WORK!</h3></div>');
+    res.send('<div style=\'text-align: center;\'><h1>Welcome to Teamwork</h1><h3>... where teams actually WORK!</h3><img src=\'https://res.cloudinary.com/thevetdoctor/image/upload/v1554313024/oba.jpg\'/></div>');
 });
  
 app.get('/', (req, res, next) => {

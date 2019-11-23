@@ -1,7 +1,7 @@
 import GifModel from '../models/gifModel';
 import CommentModel from '../models/commentModel';
 import EmployeeModel from '../models/employeeModel';
-import cloud from '../helpers/cloudinary';
+import cloudinary from '../helpers/cloudinary';
 
 
 class GifController {
@@ -13,13 +13,40 @@ static async createGif(req, res) {
    console.log(req.body);
         let authorId = req.body.authorId;
 
-       const newImageUrl = await cloud.uploads(req.body.imageUrl);
-                                      // // .then(result => { url, id })
-                                      // .then(result => result)
-                                      // .catch(e => console.log(e));
-      
-      console.log('new image url', newImageUrl);
-      
+      //  const getNewImageUrl = async() => {
+      //    try {
+        // console.log(cloud.uploads);
+        // const url = await cloud.uploads(imageUrl).then(result => console.log(result));
+        // console.log(url);
+      //  }
+      //  getNewImageUrl();
+
+
+
+      // try {
+
+      let multipleUpload = new Promise(async (resolve, reject) => {
+              await cloudinary.v2.uploader.upload(imageUrl, (error, result) => {
+                if(result){
+                resolve(result);
+                  } else {
+                    console.log(error);
+                    reject(error)
+                  }
+              })
+      })
+      .then((result) => result)
+      .catch((error) => error)
+  
+      let upload = await multipleUpload;
+      console.log(upload);
+      // } catch(e) {
+      //   console.log(e);
+      //   return res.status(404).json({
+      //     message: 'Error with upload'
+      //   });
+      // }
+
 
     const newGif = new GifModel(authorId, title, imageUrl);
 
@@ -32,8 +59,9 @@ if (missingValue.length > 0) {
     });
 }
 
-    const url = req.protocol + '://' + req.get('host');
-    newGif.imageUrl = url + '/images/' + '';
+    // const url = req.protocol + '://' + req.get('host');
+    // newGif.imageUrl = 'url' + '/images/' + '';
+    newGif.imageUrl = upload.url;
  
     const authorExist = await EmployeeModel.find(`userid=${newGif.authorId}`);
     if (authorExist) {
