@@ -18,6 +18,8 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   imageUrl VARCHAR(255) NOT NULL,
                                                   createdOn TIME WITH TIME ZONE DEFAULT NOW(),
                                                   lastUpdated TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  flagged BOOLEAN DEFAULT false,
+                                                  liked INT DEFAULT 0,
                                                   foreign key(authorId) references employees(userId)
                                                 );
                     CREATE TABLE IF NOT EXISTS articles(
@@ -27,6 +29,8 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   article TEXT NOT NULL,
                                                   createdOn TIME WITH TIME ZONE DEFAULT NOW(),
                                                   lastUpdated TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  flagged BOOLEAN DEFAULT false,
+                                                  liked INT DEFAULT 0,
                                                   foreign key(authorId) references employees(userId)
                                                 );
                     CREATE TABLE IF NOT EXISTS comments(
@@ -36,6 +40,8 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   comment TEXT NOT NULL,
                                                   type TEXT DEFAULT 'article',
                                                   createdOn TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  flagged BOOLEAN DEFAULT false,
+                                                  liked INT DEFAULT 0,
                                                   foreign key(authorId) references employees(userId),
                                                   foreign key(gifarticleId) references gifs(gifId),
                                                   foreign key(gifarticleId) references articles(articleId)
