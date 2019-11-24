@@ -9,44 +9,33 @@ class GifController {
 
 static async createGif(req, res) {
     const { title, imageUrl } = req.body;
-  //  console.log(JSON.parse(req.body.thing));
+  //  console.log(JSON.parse(req.body));
    console.log(req.body);
         let authorId = req.body.authorId;
 
-      //  const getNewImageUrl = async() => {
-      //    try {
-        // console.log(cloud.uploads);
-        // const url = await cloud.uploads(imageUrl).then(result => console.log(result));
-        // console.log(url);
-      //  }
-      //  getNewImageUrl();
-
-
-
-      // try {
 
       let multipleUpload = new Promise(async (resolve, reject) => {
-              await cloudinary.v2.uploader.upload(imageUrl, (error, result) => {
+             try {
+                await cloudinary.v2.uploader.upload(imageUrl, (error, result) => {
                 if(result){
                 resolve(result);
                   } else {
-                    console.log(error);
+                    console.log('error with upload');
                     reject(error)
                   }
               })
+            } catch(e) {
+              return e;
+            }
+
       })
       .then((result) => result)
-      .catch((error) => error)
+      .catch((error) => console.log('error found in catch'))
   
       let upload = await multipleUpload;
-      console.log(upload);
-      // } catch(e) {
-      //   console.log(e);
-      //   return res.status(404).json({
-      //     message: 'Error with upload'
-      //   });
-      // }
+      if (upload) newGif.imageUrl = upload.url;
 
+      console.log(upload);
 
     const newGif = new GifModel(authorId, title, imageUrl);
 
@@ -59,10 +48,6 @@ if (missingValue.length > 0) {
     });
 }
 
-    // const url = req.protocol + '://' + req.get('host');
-    // newGif.imageUrl = 'url' + '/images/' + '';
-    newGif.imageUrl = upload.url;
- 
     const authorExist = await EmployeeModel.find(`userid=${newGif.authorId}`);
     if (authorExist) {
       if (authorExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with author' });
@@ -83,7 +68,7 @@ if (missingValue.length > 0) {
     }
 
     const data = {
-        gifId: createdGif[0].gifId,
+        gifId: createdGif[0].gifid,
         message: 'GIF image successfully posted',
         createdOn: createdGif[0].createdon,
         title: createdGif[0].title,
