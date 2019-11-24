@@ -10,13 +10,36 @@ class GifController {
 static async createGif(req, res) {
     const { title, imageUrl } = req.body;
   //  console.log(JSON.parse(req.body));
-   console.log(req.body);
+  //  console.log(req.body);
         let authorId = req.body.authorId;
 
+        const newGif = new GifModel(authorId, title, imageUrl);
+
+        const missingValue = Object.keys(newGif)
+                                   .filter(item => ((newGif[item] === undefined) || (newGif[item] === '')));
+        if (missingValue.length > 0) {
+              return res.status(400).json({
+                status: 'error',  
+                error: `${missingValue} not supplied`,
+            });
+        }
+        
+            const authorExist = await EmployeeModel.find(`userid=${newGif.authorId}`);
+            if (authorExist) {
+              if (authorExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with author' });
+              if (authorExist.length < 1) return res.status(400).json({ status: 'error', error: 'Author not found' });
+            }
+        
+            const gifExist = await GifModel.find(`title=${newGif.title}`);
+            if (gifExist) {
+              if (gifExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with GIF' });
+              if (gifExist.length > 0) return res.status(400).json({ status: 'error', error: 'GIF already exists' });
+            }
 
       let multipleUpload = new Promise(async (resolve, reject) => {
              try {
-                await cloudinary.v2.uploader.upload(imageUrl, (error, result) => {
+                await cloudinary.v2.uploader.upload(imageUrl, { folder: 'teamwork/', use_filename: true, 
+                unique_filename: false }, (error, result) => {
                 if(result){
                 resolve(result);
                   } else {
@@ -33,35 +56,19 @@ static async createGif(req, res) {
       .catch((error) => console.log('error found in catch'))
   
       let upload = await multipleUpload;
-      if (upload) newGif.imageUrl = upload.url;
 
-      console.log(upload);
+      if (upload) {
+        newGif.imageUrl = upload.url;
+      } else {
+        return res.status(400).json({
+          status: 'error',
+          data: {
+            message: 'Error with getting URL'
+          }
+        });
+      }
 
-    const newGif = new GifModel(authorId, title, imageUrl);
 
-const missingValue = Object.keys(newGif)
-                           .filter(item => ((newGif[item] === undefined) || (newGif[item] === '')));
-if (missingValue.length > 0) {
-      return res.status(400).json({
-        status: 'error',  
-        error: `${missingValue} not supplied`,
-    });
-}
-
-    const authorExist = await EmployeeModel.find(`userid=${newGif.authorId}`);
-    if (authorExist) {
-      if (authorExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with author' });
-      if (authorExist.length < 1) return res.status(400).json({ status: 'error', error: 'Author not found' });
-    }
-
-    const gifExist = await GifModel.find(`title=${newGif.title}`);
-    if (gifExist) {
-      if (gifExist.indexOf('not') >= 0) return res.status(400).json({ status: 'error', error: 'Some error found with GIF' });
-      if (gifExist.length > 0) return res.status(400).json({ status: 'error', error: 'GIF already exists' });
-    }
-
-    // console.log('new gif', newGif);
-  
     const createdGif = await newGif.save();
     if (createdGif.indexOf('not') >= 0) {
       return res.status(400).json({ status: 'error', error: 'Some error found with new GIF' });

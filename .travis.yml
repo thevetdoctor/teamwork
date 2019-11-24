@@ -10,13 +10,21 @@ cache:
 services :
   - postgresql
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=6296573675c38ff0324b0c3c964ea2e5029532e67de1c2d6f025ef0b49e53d8f
+    # - NODE_ENV=test
+
 before_script:
-  # - psql -c 'create database test_teamwork;' -U postgres
-  # - psql -c `create user postgres with password 'animalworld';` -U postgres
-  # - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  # - chmod +x ./cc-test-reporter
-  # - ./cc-test-reporter before-build
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script:
  - npm test
+
+ after_success:
  - npm run coverage
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
