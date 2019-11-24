@@ -91,7 +91,7 @@ class FeedController {
             const argumentsObj = { authorId, id, type };
             const missingValue = Object.keys(argumentsObj)
             .filter(item => ((argumentsObj[item] === undefined) || (argumentsObj[item] === '')));
-            // console.log(missingValue);
+
             if (missingValue.length > 0) {
             return res.status(400).json({
             status: 'error',  
@@ -99,7 +99,6 @@ class FeedController {
             });
             }
 
-            // console.log('req body', req.body);
 
             const entityToDelete = await db.query(`SELECT * FROM ${type}s WHERE ${type}id=${id}`)
                                             .then(result => result.rows)
@@ -121,7 +120,7 @@ class FeedController {
                     error: `${type} should be FLAGGED before DELETION`
                 }) 
             }
-            console.log('entity to delete', entityToDelete);
+            // console.log('entity to delete', entityToDelete);
           const deletedEntity = await db.query(`DELETE FROM ${type}s WHERE ${type}id=${id} RETURNING *`)
                                         .then(result => result.rows)
                                         .catch(err => {
