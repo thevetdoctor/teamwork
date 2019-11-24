@@ -120,7 +120,6 @@ class FeedController {
                     error: `${type} should be FLAGGED before DELETION`
                 }) 
             }
-            // console.log('entity to delete', entityToDelete);
           const deletedEntity = await db.query(`DELETE FROM ${type}s WHERE ${type}id=${id} RETURNING *`)
                                         .then(result => result.rows)
                                         .catch(err => {
