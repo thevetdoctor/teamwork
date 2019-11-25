@@ -4,11 +4,12 @@
   "description": "An internal social network for employees of an organization",
   "main": "main.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/main.js",
+    "dev": "nodemon --exec babel-node src/main.js",
+    "start": "node build/main.js",
     "test": "set NODE_ENV=test && nyc --require @babel/register mocha src/test --exit",
     "test1": "set NODE_ENV=test && babel-node src/db/clearTestDB && nyc --require @babel/register mocha src/test --exit",
     "cleardb": "babel-node src/db/clearTestDB --exit",
-    "cleartestdb": "set NODE_ENV=test && babel-node src/db/clearTestDB --exit",
+    "cleardbtest": "set NODE_ENV=test && babel-node src/db/clearTestDB --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {

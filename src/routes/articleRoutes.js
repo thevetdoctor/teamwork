@@ -1,20 +1,22 @@
 import express from 'express';
 import ArticleController from '../controllers/articleController';
+import checkAuth from '../checkAuth';
+import authUser from '../checkAuth/authUser';
 
 const router = express.Router();
 
 
-router.post('/', ArticleController.createArticle);
+router.post('/', checkAuth, authUser, ArticleController.createArticle);
 
-router.patch('/:articleId', ArticleController.updateArticle);
+router.patch('/:articleId', checkAuth, authUser, ArticleController.updateArticle);
 
-router.delete('/:articleId', ArticleController.deleteArticle);
+router.delete('/:articleId', checkAuth, authUser, ArticleController.deleteArticle);
 
-router.post('/:articleId/comment', ArticleController.createComment);
+router.post('/:articleId/comment', checkAuth, authUser, ArticleController.createComment);
 
-router.get('/:articleId', ArticleController.getArticleById);
+router.get('/:articleId', checkAuth, authUser, ArticleController.getArticleById);
 
-router.get('/category?searchQuery', ArticleController.getArticleById);
+router.get('/category?searchQuery', checkAuth, authUser, ArticleController.getArticleById);
  
 
 export default router;

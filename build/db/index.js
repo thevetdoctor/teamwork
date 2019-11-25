@@ -9,7 +9,8 @@ var _pg = require("pg");
 
 require("dotenv/config");
 
-var elephantSql = 'postgres://aikuwuqy:VwJSaP-pOdEc--_ZNpS-g2zHekiTgLJK@raja.db.elephantsql.com:5432/aikuwuqy';
+// const elephantSql = 'postgres://aikuwuqy:VwJSaP-pOdEc--_ZNpS-g2zHekiTgLJK@raja.db.elephantsql.com:5432/aikuwuqy';
+// const elephantSqlTest = 'postgres://ujkhiehs:JLm9XTjoF7_cyAP48mKgiGO_Hlxt6b-0@salt.db.elephantsql.com:5432/ujkhiehs';
 var dbUrl = {
   host: process.env.HOST,
   user: process.env.USER,
@@ -24,17 +25,25 @@ var dbUrlTest = {
   password: process.env.TEST_PASS,
   port: process.env.TEST_DB_PORT
 };
-console.log('NODE_ENV', process.env.NODE_ENV);
+console.log('NODE_ENV', process.env.NODE_ENV, process.env.COMPUTERNAME);
 var db;
 
-if (process.env.NODE_ENV !== 'test') {
-  // db = new Client(dbUrlTest);
-  db = new _pg.Client(elephantSql);
-  console.log('Environment => Testing');
+if (process.env.NODE_ENV === 'test ') {
+  if (process.env.COMPUTERNAME === 'ACER-PC') {
+    db = new _pg.Client(dbUrlTest);
+    console.log('Environment => Testing Local');
+  } else {
+    db = new _pg.Client(process.env.DB_CLOUD_TEST);
+    console.log('Environment => Testing Cloud');
+  }
 } else {
-  db = new _pg.Client(dbUrl); // db = new Client(process.env.DATABASE_URL);
-
-  console.log('Environment => Development');
+  if (process.env.COMPUTERNAME === 'ACER-PC') {
+    db = new _pg.Client(dbUrl);
+    console.log('Environment => Development');
+  } else {
+    db = new _pg.Client(process.env.DB_CLOUD);
+    console.log('Environment => Production');
+  }
 }
 
 db.connect(function (err, res) {

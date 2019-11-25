@@ -36,7 +36,7 @@ var EmployeeModel =
 function (_BaseModel) {
   _inherits(EmployeeModel, _BaseModel);
 
-  function EmployeeModel(firstName, lastName, email, password, gender, jobRole, department, address) {
+  function EmployeeModel(firstName, lastName, email, password, gender, jobRole, department, address, isAdmin) {
     var _this;
 
     _classCallCheck(this, EmployeeModel);
@@ -50,6 +50,7 @@ function (_BaseModel) {
     _this.jobRole = jobRole;
     _this.department = department;
     _this.address = address;
+    _this.isAdmin = isAdmin;
     return _this;
   }
 

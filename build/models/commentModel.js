@@ -36,14 +36,14 @@ var CommentModel =
 function (_BaseModel) {
   _inherits(CommentModel, _BaseModel);
 
-  function CommentModel(authorId, articleId, comment) {
+  function CommentModel(authorId, gifarticleId, comment) {
     var _this;
 
     _classCallCheck(this, CommentModel);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(CommentModel).call(this));
     _this.authorId = authorId;
-    _this.articleId = articleId;
+    _this.gifarticleId = gifarticleId;
     _this.comment = comment;
     return _this;
   }

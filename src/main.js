@@ -43,7 +43,7 @@ app.use((error, req, res, next) => {
 
 app.get('/api/v1', (req, res, next) => {
     
-    res.send('<div style=\'text-align: center;\'><h1>Welcome to Teamwork</h1><h3>... where teams actually WORK!</h3><img src=\'https://res.cloudinary.com/thevetdoctor/image/upload/v1574600900/teamwork/Penguins.jpg\'/></div>');
+    res.send('<div style=\'text-align: center;\'><h1>Welcome to Teamwork</h1><h3>... where teams actually WORK!</h3><img src=\'https://res.cloudinary.com/thevetdoctor/image/upload/v1574600900/teamwork/Penguins.jpg\' alt=\'Team Bond Image\'/></div>');
 });
  
 app.get('/', (req, res, next) => {
@@ -54,7 +54,7 @@ app.get('/', (req, res, next) => {
             </div>`);
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
 // (async function() {
 // // await db.query('delete from team where id=1 returning *')
