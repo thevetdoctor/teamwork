@@ -49,11 +49,13 @@ describe('Test Endpoints', function () {
 
     done();
   });
-});
+}); // Test Employee Endpoints
+
 describe('Employee Endpoints', function () {
   it('EmployeeController should exist', function () {
     _employeeController["default"].should.exist;
-  });
+  }); // Test createUser Endpoints
+
   it('createUser  method (POST) should exist', function () {
     _employeeController["default"].createUser.should.exist;
   });
@@ -148,7 +150,8 @@ describe('Employee Endpoints', function () {
     });
 
     done();
-  });
+  }); // Test signIn Endpoints
+
   it('signIn  method (POST) should exist', function () {
     _employeeController["default"].signIn.should.exist;
   });
@@ -219,11 +222,13 @@ describe('Employee Endpoints', function () {
 
     done();
   });
-});
+}); // Test Article Endpoints
+
 describe('Article Endpoints', function () {
   it('ArticleController should exist', function () {
     _articleController["default"].should.exist;
-  });
+  }); // Test createArticle Endpoints
+
   it('createArticle  method (POST) should exist', function () {
     _articleController["default"].createArticle.should.exist;
   });
@@ -471,7 +476,7 @@ describe('Article Endpoints', function () {
     });
 
     done();
-  }); // Test createComment Endpoints
+  }); // Test createComment on articles Endpoints
 
   it('createComment method (POST) should exist', function () {
     _articleController["default"].createComment.should.exist;
@@ -489,6 +494,9 @@ describe('Article Endpoints', function () {
       res.body.should.have.property('data');
       res.body.data.should.be.a('object');
       res.body.data.should.have.property('message');
+      res.body.data.should.have.property('createdOn');
+      res.body.data.should.have.property('articleTitle');
+      res.body.data.should.have.property('article');
     });
 
     done();
@@ -562,91 +570,84 @@ describe('Article Endpoints', function () {
 describe('GIF Endpoints', function () {
   it('GifController should exist', function () {
     _gifController["default"].should.exist;
-  }); // it('createGif method (POST) should exist', () => {
-  //   GifController.createGif.should.exist;
-  // });
-  // it('createGif method (POST) should create gif post with title & image(Url)', (done) => {
-  //   chai.request(server)
-  //     .post('/api/v1/gifs')
-  //     .send({
-  //       authorId: 1,
-  //       title: `Test Edition${count}`,
-  //       image: '',
-  //     })
-  //     .end((err, res) => {
-  //       res.should.have.status(201);
-  //       res.should.be.json;
-  //       res.body.should.be.a('object');
-  //       res.body.should.have.property('status');
-  //       res.body.status.should.be.a('string');
-  //       res.body.should.have.property('data');
-  //       res.body.data.should.be.a('object');
-  //       res.body.data.should.have.property('gifId');
-  //       res.body.data.should.have.property('message');
-  //       res.body.data.should.have.property('createdOn');
-  //       res.body.data.should.have.property('title');
-  //       res.body.data.should.have.property('imageUrl');
-  //     });
-  //   done();
-  // });
-  // it('createGif method (POST) should return ERROR if any value is missing', (done) => {
-  //   chai.request(server)
-  //     .post('/api/v1/gifs')
-  //     .send({
-  //       authorId: 1,
-  //       title: '',
-  //       image: '',
-  //     })
-  //     .end((err, res) => {
-  //       res.should.have.status(400);
-  //       res.should.be.json;
-  //       res.body.should.be.a('object');
-  //       res.body.should.have.property('status');
-  //       res.body.status.should.be.a('string');
-  //       res.body.should.have.property('error');
-  //       res.body.error.should.be.a('string');
-  //     });
-  //   done();
-  // });
-  // it('createGif method (POST) should return ERROR if author NOT FOUND', (done) => {
-  //   chai.request(server)
-  //     .post('/api/v1/gifs')
-  //     .send({
-  //       authorId: 0,
-  //       title: `Test Edition${count + 1}`,
-  //       image: '',
-  //     })
-  //     .end((err, res) => {
-  //       res.should.have.status(400);
-  //       res.should.be.json;
-  //       res.body.should.be.a('object');
-  //       res.body.should.have.property('status');
-  //       res.body.status.should.be.a('string');
-  //       res.body.should.have.property('error');
-  //       res.body.error.should.be.a('string');
-  //     });
-  //   done();
-  // });
-  // it('createGif method (POST) should return ERROR if gif post already exists', (done) => {
-  //   chai.request(server)
-  //     .post('/api/v1/gifs')
-  //     .send({
-  //       authorId: 1,
-  //       title: `Test Edition${count}`,
-  //       image: '',
-  //     })
-  //     .end((err, res) => {
-  //       res.should.have.status(400);
-  //       res.should.be.json;
-  //       res.body.should.be.a('object');
-  //       res.body.should.have.property('status');
-  //       res.body.status.should.be.a('string');
-  //       res.body.should.have.property('error');
-  //       res.body.error.should.be.a('string');
-  //     });
-  //   done();
-  // });
-  // Test deleteGif Endpoints
+  }); // Test createGif Endpoints
+
+  it('createGif method (POST) should exist', function () {
+    _gifController["default"].createGif.should.exist;
+  });
+  it('createGif method (POST) should create gif post with title & image(Url)', function (done) {
+    _chai["default"].request(_main["default"]).post('/api/v1/gifs').send({
+      authorId: 1,
+      title: "Test Edition".concat(count),
+      imageUrl: 'testimage'
+    }).end(function (err, res) {
+      res.should.have.status(201);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('data');
+      res.body.data.should.be.a('object');
+      res.body.data.should.have.property('gifId');
+      res.body.data.should.have.property('message');
+      res.body.data.should.have.property('createdOn');
+      res.body.data.should.have.property('title');
+      res.body.data.should.have.property('imageUrl');
+    });
+
+    done();
+  });
+  it('createGif method (POST) should return ERROR if any value is missing', function (done) {
+    _chai["default"].request(_main["default"]).post('/api/v1/gifs').send({
+      authorId: 1,
+      title: '',
+      imageUrl: ''
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  });
+  it('createGif method (POST) should return ERROR if author NOT FOUND', function (done) {
+    _chai["default"].request(_main["default"]).post('/api/v1/gifs').send({
+      authorId: 0,
+      title: "Test Edition".concat(count + 1),
+      imageUrl: 'testimage'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  });
+  it('createGif method (POST) should return ERROR if gif post already exists', function (done) {
+    _chai["default"].request(_main["default"]).post('/api/v1/gifs').send({
+      authorId: 1,
+      title: "Test Edition".concat(count),
+      imageUrl: 'testimage'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  }); // Test deleteGif Endpoints
 
   it('deleteGif method (DELETE) should exist', function () {
     _gifController["default"].deleteGif.should.exist;
@@ -715,6 +716,94 @@ describe('GIF Endpoints', function () {
   it('deleteGif method (DELETE) should return ERROR if GIF is NOT FOUND', function (done) {
     _chai["default"].request(_main["default"])["delete"]('/api/v1/gifs/100000').send({
       authorId: 1
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  }); // Test createComment on GIF Endpoints
+
+  it('createComment method (POST) should exist', function () {
+    _gifController["default"].createComment.should.exist;
+  });
+  it('createComment method (POST) should create a comment for a specific gif post', function (done) {
+    _chai["default"].request(_main["default"]).post('/api/v1/gifs/1/comment').send({
+      authorId: 1,
+      comment: 'latest gif comment'
+    }).end(function (err, res) {
+      res.should.have.status(201);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('data');
+      res.body.data.should.be.a('object');
+      res.body.data.should.have.property('message');
+      res.body.data.should.have.property('createdOn');
+      res.body.data.should.have.property('gifTitle');
+      res.body.data.should.have.property('comment');
+    });
+
+    done();
+  });
+  it('createComment method (POST) should return ERROR if gifId is not a number', function (done) {
+    _chai["default"].request(_main["default"]).post('/api/v1/gifs/a/comment').send({
+      authorId: 1,
+      comment: 'latest comment'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  });
+  it('createComment method (POST) should return ERROR if authorId is not a number', function (done) {
+    _chai["default"].request(_main["default"]).post('/api/v1/gifs/1/comment').send({
+      authorId: 'a',
+      comment: 'latest comment'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  });
+  it('createComment method (POST) should return ERROR if any value is missing', function (done) {
+    _chai["default"].request(_main["default"]).post('/api/v1/gifs/1/comment').send({
+      authorId: '',
+      comment: 'latest comment'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.be.a('string');
+      res.body.should.have.property('error');
+      res.body.error.should.be.a('string');
+    });
+
+    done();
+  });
+  it('createComment method (POST) should return ERROR if gif post is NOT FOUND', function (done) {
+    _chai["default"].request(_main["default"]).post('/api/v1/gifs/100000/comment').send({
+      authorId: 1,
+      comment: 'latest comment'
     }).end(function (err, res) {
       res.should.have.status(400);
       res.should.be.json;

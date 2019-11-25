@@ -23,16 +23,16 @@ exports.saveQuery = saveQuery;
 
 var updateQuery = function updateQuery(obj, position, condition, by) {
   var splitPosition = position.split('&');
-  var splitTitle = splitPosition[0].split('=');
-  var splitArticle = splitPosition[1].split('=');
-  var set = "".concat(splitTitle[0], "=$1, ").concat(splitArticle[0], "=$2");
+  var split1 = splitPosition[0].split('=');
+  var split2 = splitPosition[1].split('=');
+  var set = "".concat(split1[0], "=$1, ").concat(split2[0], "=$2");
   var splitCondition = condition.split('=');
   var where = "".concat(splitCondition[0], "=$3");
-  var valueOne = splitTitle[1];
-  var valueTwo = splitArticle[1];
+  var valueOne = split1[1];
+  var valueTwo = split2[1];
   var valueThree = splitCondition[1];
-  var str = ["UPDATE ".concat(obj, " SET ").concat(set, ", lastUpdated=now() WHERE ").concat(where, " RETURNING *"), [valueOne, valueTwo, valueThree]];
-  console.log(str);
+  var str = ["UPDATE ".concat(obj, " SET ").concat(set, ", lastUpdated=now() WHERE ").concat(where, " RETURNING *"), [valueOne, valueTwo, valueThree]]; // console.log(str);
+
   var queryStr = [].concat(str);
   return queryStr;
 };
@@ -45,21 +45,47 @@ var findQuery = function findQuery(obj) {
   var count = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '*';
 
   if (position !== '') {
-    var split = position.split('=');
-    var where = "".concat(split[0], "=$1");
-    var values = split[0] !== 'id' ? split[1] : parseInt(split[1], 10);
-    var str = '';
+    if (position.includes('&')) {
+      // console.log(position);
+      var positionTwo = position.split('&');
+      var split1 = positionTwo[0].split('=');
+      var split2 = positionTwo[1].split('=');
+      var where = "".concat(split1[0], "=$1 AND ").concat(split2[0], "=$2");
+      var values1 = split1[1];
+      var values2 = split2[1]; // console.log(split1, split2);
 
-    if (order !== '') {
-      str = ["SELECT ".concat(count, " FROM ").concat(obj, " WHERE ").concat(where, " ORDER BY ").concat(order, " DESC"), [values]];
+      var str = '';
+
+      if (order !== '') {
+        str = ["SELECT ".concat(count, " FROM ").concat(obj, " WHERE ").concat(where, " ORDER BY ").concat(order, " DESC"), [values1, values2]];
+      } else {
+        str = ["SELECT ".concat(count, " FROM ").concat(obj, " WHERE ").concat(where), [values]];
+      } // console.log(str, order);
+
+
+      var _queryStr = _toConsumableArray(str);
+
+      return _queryStr;
     } else {
-      str = ["SELECT ".concat(count, " FROM ").concat(obj, " WHERE ").concat(where), [values]];
-    } // console.log(str, order);
+      var split = position.split('=');
+
+      var _where = "".concat(split[0], "=$1");
+
+      var _values = split[0] !== 'id' ? split[1] : parseInt(split[1], 10);
+
+      var _str = '';
+
+      if (order !== '') {
+        _str = ["SELECT ".concat(count, " FROM ").concat(obj, " WHERE ").concat(_where, " ORDER BY ").concat(order, " DESC"), [_values]];
+      } else {
+        _str = ["SELECT ".concat(count, " FROM ").concat(obj, " WHERE ").concat(_where), [_values]];
+      } // console.log(str, order);
 
 
-    var _queryStr = _toConsumableArray(str);
+      var _queryStr2 = _toConsumableArray(_str);
 
-    return _queryStr;
+      return _queryStr2;
+    }
   }
 
   var queryStr = "SELECT ".concat(count, " FROM ").concat(obj);
@@ -87,9 +113,9 @@ var searchQuery = function searchQuery(obj) {
     } // console.log(str, order);
 
 
-    var _queryStr2 = _toConsumableArray(str);
+    var _queryStr3 = _toConsumableArray(str);
 
-    return _queryStr2;
+    return _queryStr3;
   }
 
   var queryStr = "SELECT ".concat(count, " FROM ").concat(obj);

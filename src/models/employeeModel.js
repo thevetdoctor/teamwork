@@ -3,7 +3,7 @@ import db from '../db';
 import { saveQuery } from '../db/query';
 
 class EmployeeModel extends BaseModel {
-  constructor(firstName, lastName, email, password, gender, jobRole, department, address) {
+  constructor(firstName, lastName, email, password, gender, jobRole, department, address, isAdmin) {
     super();
     this.firstName = firstName;
     this.lastName = lastName;
@@ -13,6 +13,7 @@ class EmployeeModel extends BaseModel {
     this.jobRole = jobRole;
     this.department = department;
     this.address = address;
+    this.isAdmin = isAdmin;
   }
 
 

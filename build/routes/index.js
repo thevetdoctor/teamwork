@@ -11,6 +11,8 @@ var _articleRoutes = _interopRequireDefault(require("./articleRoutes"));
 
 var _gifRoutes = _interopRequireDefault(require("./gifRoutes"));
 
+var _feedRoute = _interopRequireDefault(require("./feedRoute"));
+
 var _testRoutes = _interopRequireDefault(require("./testRoutes"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -19,6 +21,7 @@ var _default = function _default(app) {
   app.use('/api/v1/auth', _employeeRoutes["default"]);
   app.use('/api/v1/articles', _articleRoutes["default"]);
   app.use('/api/v1/gifs', _gifRoutes["default"]);
+  app.use('/api/v1/feed', _feedRoute["default"]);
   app.use('/api/v1/test', _testRoutes["default"]);
 };
 

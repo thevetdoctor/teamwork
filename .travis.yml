@@ -7,18 +7,21 @@ cache:
   directories:
   - 'node_modules'
 
-services :
-  - postgresql
+# services :
+#   - postgresql
 
 env:
   global:
     - CC_TEST_REPORTER_ID=6296573675c38ff0324b0c3c964ea2e5029532e67de1c2d6f025ef0b49e53d8f
+    - DB_CLOUD = postgres://aikuwuqy:VwJSaP-pOdEc--_ZNpS-g2zHekiTgLJK@raja.db.elephantsql.com:5432/aikuwuqy
+    - DB_CLOUD_TEST = postgres://ujkhiehs:JLm9XTjoF7_cyAP48mKgiGO_Hlxt6b-0@salt.db.elephantsql.com:5432/ujkhiehs
+
     # - NODE_ENV=test
 
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+# before_script:
+#   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+#   - chmod +x ./cc-test-reporter
+#   - ./cc-test-reporter before-build
 
 script:
  - npm test

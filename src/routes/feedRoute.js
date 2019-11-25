@@ -1,16 +1,19 @@
 import express from 'express';
 import FeedController from '../controllers/feedController';
+import checkAuth from '../checkAuth';
+import admin from '../checkAuth/admin';
+import authUser from '../checkAuth/authUser';
 
 const router = express.Router();
 
 
-router.patch('/like', FeedController.likeEntity);
+router.get('/', checkAuth, authUser, FeedController.getFeed);
 
-router.patch('/flag', FeedController.flagEntity);
+router.patch('/like', checkAuth, authUser, FeedController.likeEntity);
 
-router.get('/', FeedController.getFeed);
+router.patch('/flag', checkAuth, authUser, FeedController.flagEntity);
 
-router.delete('/', FeedController.deleteFlaggedEntity);
+router.delete('/', checkAuth, authUser, admin, FeedController.deleteFlaggedEntity);
 
 
 export default router;
