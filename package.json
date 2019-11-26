@@ -1,6 +1,9 @@
 {
   "name": "teamwork",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.x"
+  },
   "description": "An internal social network for employees of an organization",
   "main": "main.js",
   "scripts": {
