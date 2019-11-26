@@ -63,12 +63,8 @@ var migrate = function migrate() {
       }
     }
   }, null, null, [[0, 16]]);
-};
+}; // migrate().then(result => console.log('Tables created')).catch(e => console.log(e));
 
-migrate().then(function (result) {
-  return console.log('Tables created');
-})["catch"](function (e) {
-  return console.log(e);
-});
+
 var _default = migrate;
 exports["default"] = _default;

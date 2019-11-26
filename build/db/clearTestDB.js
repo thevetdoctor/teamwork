@@ -7,6 +7,8 @@ exports["default"] = void 0;
 
 var _db = _interopRequireDefault(require("../db"));
 
+var _migrations = _interopRequireDefault(require("../db/migrations"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var clearDBQuery = "DROP TABLE IF EXISTS comments;\n                      DROP TABLE IF EXISTS articles;\n                      DROP TABLE IF EXISTS gifs;\n                      DROP TABLE IF EXISTS employees;";
@@ -40,6 +42,11 @@ var clearDB = function clearDB() {
 
 clearDB().then(function (result) {
   return console.log('TestDB cleared');
+})["catch"](function (e) {
+  return console.log(e);
+});
+(0, _migrations["default"])().then(function (result) {
+  return console.log('Tables created');
 })["catch"](function (e) {
   return console.log(e);
 });

@@ -163,20 +163,20 @@ function () {
           switch (_context5.prev = _context5.next) {
             case 0:
               obj = this.name;
-              obj = obj.replace('Model', 's').toLowerCase();
-              console.log(obj, position, order);
-              _context5.next = 5;
+              obj = obj.replace('Model', 's').toLowerCase(); // console.log(obj, position, order);
+
+              _context5.next = 4;
               return regeneratorRuntime.awrap(_db["default"].query.apply(_db["default"], _toConsumableArray((0, _query.searchQuery)(obj, position, order))).then(function (result) {
                 return result.rows;
               })["catch"](function (err) {
                 return 'Error found here!', err.message;
               }));
 
-            case 5:
+            case 4:
               res = _context5.sent;
               return _context5.abrupt("return", res);
 
-            case 7:
+            case 6:
             case "end":
               return _context5.stop();
           }

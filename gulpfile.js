@@ -10,7 +10,15 @@ gulp.task('build', (done) => {
           }))
         .pipe(gulp.dest('./build/'));
         done();
-});
+}); 
+
+
+// gulp.task('processHTML', (done) => {
+//     gulp.src('*.html')
+//       .pipe(gulp.dest('build'));
+//       done();
+// });
+
 
 gulp.task('watch', gulp.parallel((done) => {
     gulp.watch('./*.js', gulp.series('build'));

@@ -9,6 +9,9 @@
     "test": "set NODE_ENV=test && nyc --require @babel/register mocha src/test --exit",
     "test1": "set NODE_ENV=test && babel-node src/db/clearTestDB && nyc --require @babel/register mocha src/test --exit",
     "cleardb": "babel-node src/db/clearTestDB --exit",
+    "removebuild": "rm -rf ./build",
+    "build": "npm run removebuild && babel-node src --out-dir build --copy-files",
+    "pre-test": "set NODE_ENV=test && babel-node src/db/clearTestDB --exit",
     "cleardbtest": "set NODE_ENV=test && babel-node src/db/clearTestDB --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
@@ -60,6 +63,8 @@
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.2.2",
     "multer": "^1.4.2",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "swagger-jsdoc": "^3.4.0",
+    "swagger-ui-express": "^4.1.2"
   }
 }
