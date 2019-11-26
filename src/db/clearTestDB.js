@@ -1,4 +1,5 @@
 import db from '../db';
+import migrate from '../db/migrations';
 
 const clearDBQuery = `DROP TABLE IF EXISTS comments;
                       DROP TABLE IF EXISTS articles;
@@ -15,5 +16,6 @@ const clearDB = async() => {
 };
 
     clearDB().then(result => console.log('TestDB cleared')).catch(e => console.log(e));
+    migrate().then(result => console.log('Tables created')).catch(e => console.log(e));
 
 export default clearDB;

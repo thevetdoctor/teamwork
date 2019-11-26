@@ -1,0 +1,745 @@
+# swagger: '2.0'
+info:
+#   version: '1.0'
+  # title: Teamwork App
+#   description: >-
+#     # Introduction
+
+#     What does your API do?
+
+#     # Overview
+      # welcome to teamwork
+#     Things that the developers should know about
+
+#     # Authentication
+
+#     What is the preferred way of using the API?
+
+#     # Error Codes
+
+#     What errors and status codes can a user expect?
+
+#     # Rate limit
+
+#     Is there a limit to the number of requests an user can send?
+#   contact: {}
+# host: obateamwork.herokuapp.com
+# basePath: /api/v1
+# securityDefinitions: {}
+# schemes:
+# - https
+# consumes:
+# - application/json
+# produces:
+# - application/json
+paths:
+  /auth/create-user:
+    post:
+      description: ''
+      summary: Create User
+      tags:
+      - Auth
+      operationId: AuthCreateUserPost
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: firstName
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: lastName
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: email
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: password
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: gender
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: jobRole
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: department
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: address
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: Content-Type
+        in: header
+        default: x-www-urlencoded
+        required: false
+        type: string
+        description: ''
+      responses:
+        201:
+          description: 'A new employee user account successfully created by admin'
+          headers: {}
+        400:
+          description: 'Email address already used'
+          headers: {}
+        403:
+          description: 'Error with authorization'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+  /auth/signin:
+    post:
+      summary: Sign In
+      tags:
+      - Auth
+      operationId: AuthSignInPost
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      # - name: Authorization
+      #   in: header
+      #   required: false
+      #   default: Bearer {token}
+      #   type: string
+      - name: email
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: password
+        in: formData
+        required: true
+        type: string
+        description: ''
+      - name: Content-Type
+        in: header
+        required: false
+        default: 'x-www-urlencoded'
+        type: string
+        # description: 'Registered User can sign in to access the app'
+      responses:
+        200:
+          description: 'User successfully signed in'
+          headers: {}
+        400:
+          description: 'User not registered/Password is invalid'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+  /articles:
+    post:
+      description: ''
+      summary: Create Article
+      tags:
+      - Articles
+      operationId: ArticlesPost
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: title
+        in: formData
+        required: true
+        type: string
+        description: 'Title of Article'
+      - name: article
+        in: formData
+        required: true
+        type: string
+        description: 'Text of Article'
+      - name: Content-Type
+        in: header
+        required: false
+        default: x-www-urlencoded
+        type: string
+        description: ''
+      responses:
+        200:
+          description: 'Article successfully posted'
+          headers: {}
+        400:
+          description: 'Article already exist'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+  /articles/17:
+    patch:
+      description: ''
+      summary: Update Article
+      tags:
+      - Articles
+      operationId: ArticlesPatch
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: articleId
+        in: formData
+        required: true
+        type: integer
+        format: int32
+        description: 'Article ID'
+      - name: title
+        in: formData
+        required: true
+        type: string
+        description: 'Updated Title of Article'
+      - name: article
+        in: formData
+        required: true
+        type: string
+        description: 'Updated Text of Article'
+      - name: Content-Type
+        in: header
+        required: false
+        default: x-www-urlencoded
+        type: string
+        description: ''
+      responses:
+        200:
+          description: 'Article successfully updated'
+          headers: {}
+        400:
+          description: 'Article not found'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+  # /articles/:articleId(delete):
+    delete:
+      description: ''
+      summary: Delete Article
+      tags:
+      - Articles
+      operationId: ArticlesDelete
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: articleId
+        in: formData
+        required: true
+        type: integer
+        format: int32
+        description: 'Article ID'
+      - name: Content-Type
+        in: header
+        required: false
+        default: x-www-urlencoded
+        type: string
+        description: ''
+      responses:
+        200:
+          description: 'Article successfully deleted'
+          headers: {}
+        400:
+          description: 'Article not found'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+  /articles/:articleId/comment:
+    post:
+      description: ''
+      summary: Post comment on a specific Article
+      tags:
+      - Articles
+      operationId: ArticlesPost
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: articleId
+        in: formData
+        required: true
+        type: integer
+        format: int32
+        description: 'Article ID'
+      - name: comment
+        in: formData
+        required: true
+        type: string
+        description: 'Text of the Comment'
+      - name: Content-Type
+        in: header
+        required: false
+        default: x-www-urlencoded
+        type: string
+        description: ''
+      responses:
+        201:
+          description: 'Comment successfully created'
+          headers: {}
+        400:
+          description: 'Article not found/Same comment already given'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+  # /articles/:articleId(get):
+    get:
+      description: ''
+      summary: View a specific Article
+      tags:
+      - Articles
+      operationId: ArticlesGet
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: articleId
+        in: formData
+        required: true
+        type: integer
+        format: int32
+        description: 'Article ID'
+      - name: Content-Type
+        in: header
+        required: false
+        default: x-www-urlencoded
+        type: string
+        description: ''
+      responses:
+        200:
+          description: 'Article successfully retrieved'
+          headers: {}
+        400:
+          description: 'Article not found'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+  /articles/category?searchQuery:
+    get:
+      description: ''
+      summary: View Articles according to a category(tag)
+      tags:
+      - Articles
+      operationId: ArticlesGet
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: articleId
+        in: formData
+        required: true
+        type: string
+        description: 'searchQuery'
+      - name: Content-Type
+        in: header
+        required: false
+        default: x-www-urlencoded
+        type: string
+        description: ''
+      responses:
+        200:
+          description: 'All Articles successfully retrieved'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+/gifs:
+  post:
+    description: ''
+    summary: Create GIF post
+    tags:
+    - GIFs
+    operationId: GifsPost
+    deprecated: false
+    produces:
+    - application/json
+    consumes:
+    - application/x-www-form-urlencoded
+    parameters:
+    - name: Authorization
+      in: header
+      required: true
+      default: Bearer {token}
+      type: string
+    - name: title
+      in: formData
+      required: true
+      type: string
+      description: 'Title of GIF post'
+    - name: imageUrl
+      in: formData
+      required: true
+      type: string
+      description: 'Image URL'
+    - name: Content-Type
+      in: header
+      required: false
+      default: x-www-urlencoded
+      type: string
+      description: ''
+    responses:
+      201:
+        description: 'GIF successfully posted'
+        headers: {}
+      400:
+        description: 'GIF post already exist'
+        headers: {}
+      500:
+        description: 'Server error'
+        headers: {}
+/gifs/:gifId:
+  delete:
+    description: ''
+    summary: Delete GIF post
+    tags:
+    - GIFs
+    operationId: GifsDelete
+    deprecated: false
+    produces:
+    - application/json
+    consumes:
+    - application/x-www-form-urlencoded
+    parameters:
+    - name: Authorization
+      in: header
+      required: true
+      default: Bearer {token}
+      type: string
+    - name: gifId
+      in: formData
+      required: true
+      type: integer
+      format: int32
+      description: 'GIF post ID'
+    - name: Content-Type
+      in: header
+      required: false
+      default: x-www-urlencoded
+      type: string
+      description: ''
+    responses:
+      200:
+        description: 'GIF post successfully deleted'
+        headers: {}
+      400:
+        description: 'GIF post not found'
+        headers: {}
+      500:
+        description: 'Server error'
+        headers: {}
+/gifs/:gifId/comment:
+  post:
+    description: ''
+    summary: Post comment on a specific GIF post
+    tags:
+    - GIFs
+    operationId: GifsPost
+    deprecated: false
+    produces:
+    - application/json
+    consumes:
+    - application/x-www-form-urlencoded
+    parameters:
+    - name: Authorization
+      in: header
+      required: true
+      default: Bearer {token}
+      type: string
+    - name: gifId
+      in: formData
+      required: true
+      type: integer
+      format: int32
+      description: 'GIF post ID'
+    - name: comment
+      in: formData
+      required: true
+      type: string
+      description: 'Text of the Comment'
+    - name: Content-Type
+      in: header
+      required: false
+      default: x-www-urlencoded
+      type: string
+      description: ''
+    responses:
+      201:
+        description: 'Comment successfully created'
+        headers: {}
+      400:
+        description: 'GIF post not found/Same comment already given'
+        headers: {}
+      500:
+        description: 'Server error'
+        headers: {}
+# /gifs/:gifId(get):
+  get:
+    description: ''
+    summary: View a specific GIF post
+    tags:
+    - GIFs
+    operationId: GifsGet
+    deprecated: false
+    produces:
+    - application/json
+    consumes:
+    - application/x-www-form-urlencoded
+    parameters:
+    - name: Authorization
+      in: header
+      required: true
+      default: Bearer {token}
+      type: string
+    - name: GIF post ID
+      in: formData 
+      required: true
+      type: integer
+      format: int32
+      description: 'GIF post ID'
+    - name: Content-Type
+      in: header
+      required: false
+      default: x-www-urlencoded
+      type: string
+      description: ''
+    responses:
+      200:
+        description: 'GIF post successfully retrieved'
+        headers: {}
+      400:
+        description: 'GIF post not found'
+        headers: {}
+      500:
+        description: 'Server error'
+        headers: {}
+/feed:
+    get:
+      description: ''
+      summary: View all Articles and GIF posts
+      tags:
+      - Default
+      operationId: EntitiesGet
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: Content-Type
+        in: header
+        required: false
+        default: x-www-urlencoded
+        type: string
+        description: ''
+      responses:
+        200:
+          description: 'All entities successfully retrieved'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+/feed/like:
+    patch:
+      description: ''
+      summary: Like an Aticle/GIF post or Comment
+      tags:
+      - Default
+      operationId: EntitiesPatch
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: Entity ID
+        in: formData
+        required: true
+        type: integer
+        format: int32
+        description: 'Entity ID'
+      - name: Content-Type
+        in: header
+        required: false
+        default: x-www-urlencoded
+        type: string
+        description: ''
+      responses:
+        200:
+          description: 'Entity successfully liked'
+          headers: {}
+        400:
+          description: 'Entity not found/Entity could not be liked'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+/feed/flag:
+    patch:
+      description: ''
+      summary: Flag an Aticle/GIF post or Comment
+      tags:
+      - Default
+      operationId: EntitiesPatch
+      deprecated: false
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        default: Bearer {token}
+        type: string
+      - name: Entity ID
+        in: formData
+        required: true
+        type: integer
+        format: int32
+        description: 'Entity ID'
+      - name: Content-Type
+        in: header
+        required: false
+        default: x-www-urlencoded
+        type: string
+        description: ''
+      responses:
+        200:
+          description: 'Entity successfully flagged'
+          headers: {}
+        400:
+          description: 'Entity not found/Entity could not be flagged'
+          headers: {}
+        500:
+          description: 'Server error'
+          headers: {}
+/feed(delete):
+  delete:
+    description: ''
+    summary: Delete Article, GIF post or Comment
+    tags:
+    - Default
+    operationId: EntitiesDelete
+    deprecated: false
+    produces:
+    - application/json
+    consumes:
+    - application/x-www-form-urlencoded
+    parameters:
+    - name: Authorization
+      in: header
+      required: true
+      default: Bearer {token}
+      type: string
+    - name: Entity ID
+      in: formData
+      required: true
+      type: integer
+      format: int32
+      description: 'Entity ID'
+    - name: Entity Type
+      in: formData
+      required: true
+      type: string
+      description: 'Entity Type'
+    - name: Content-Type
+      in: header
+      required: false
+      default: x-www-urlencoded
+      type: string
+      description: ''
+    responses:
+      200:
+        description: 'Entity successfully deleted'
+        headers: {}
+      400:
+        description: 'Entity not found/Entity could not be deleted'
+        headers: {}
+      500:
+        description: 'Server error'
+        headers: {}
+  
+tags:
+- name: Auth
+  description: 'Endpoint for user accounts'
+- name: Articles
+  description: 'Endpoint for articles'
+- name: GIFs
+  description: 'Endpoint for GIF posts'
+- name: Default
+  description: 'Common Endpoint for all entities'

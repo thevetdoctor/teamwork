@@ -62,7 +62,7 @@ export default class BaseModel {
   static async search(position, order) {
     let obj = this.name;
     obj = obj.replace('Model', 's').toLowerCase();
-    console.log(obj, position, order);
+    // console.log(obj, position, order);
     const res = await db.query(...searchQuery(obj, position, order))
       .then(result => result.rows)
       .catch(err => {

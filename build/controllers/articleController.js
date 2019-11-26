@@ -134,7 +134,7 @@ function () {
   }, {
     key: "updateArticle",
     value: function updateArticle(req, res) {
-      var _req$body2, title, article, id, authorId, articleId, articleExist, updatedArticle, data;
+      var _req$body2, title, article, id, articleId, authorId, articleExist, updatedArticle, data;
 
       return regeneratorRuntime.async(function updateArticle$(_context2) {
         while (1) {
@@ -142,8 +142,8 @@ function () {
             case 0:
               _req$body2 = req.body, title = _req$body2.title, article = _req$body2.article;
               id = req.token.id;
-              authorId = id;
               articleId = parseInt(req.params.articleId, 10);
+              authorId = parseInt(id, 10);
 
               _missingValue["default"].values(res, authorId, title, article);
 
@@ -257,39 +257,38 @@ function () {
 
             case 11:
               articleExist = _context3.sent;
-              console.log(articleExist);
 
               if (!(articleExist.length < 0)) {
-                _context3.next = 18;
+                _context3.next = 17;
                 break;
               }
 
               if (!(articleExist.indexOf('not') >= 0)) {
-                _context3.next = 16;
+                _context3.next = 15;
                 break;
               }
 
               return _context3.abrupt("return", _response["default"].values(res, 400, 'Some error found with article'));
 
-            case 16:
+            case 15:
               if (!(articleExist.length < 1)) {
-                _context3.next = 18;
+                _context3.next = 17;
                 break;
               }
 
               return _context3.abrupt("return", _response["default"].values(res, 400, 'Article not found'));
 
-            case 18:
-              _context3.next = 20;
+            case 17:
+              _context3.next = 19;
               return regeneratorRuntime.awrap(_articleModel["default"]["delete"]("articleid=".concat(articleId)));
 
-            case 20:
+            case 19:
               articleDeleted = _context3.sent;
               return _context3.abrupt("return", _response["default"].values(res, 200, {
                 message: 'Article successfully deleted'
               }));
 
-            case 22:
+            case 21:
             case "end":
               return _context3.stop();
           }
@@ -449,27 +448,35 @@ function () {
                 break;
               }
 
-              return _context5.abrupt("return", _response["default"].values(res, 400, 'Invalid article ID'));
+              return _context5.abrupt("return", _response["default"].values(res, 400, 'ArticleId must be a number'));
 
             case 15:
-              _context5.next = 17;
-              return regeneratorRuntime.awrap(_articleModel["default"].find("articleid=".concat(articleId)));
+              if (!isNaN(authorId)) {
+                _context5.next = 17;
+                break;
+              }
+
+              return _context5.abrupt("return", _response["default"].values(res, 400, 'AuthorId must be a number'));
 
             case 17:
+              _context5.next = 19;
+              return regeneratorRuntime.awrap(_articleModel["default"].find("articleid=".concat(articleId)));
+
+            case 19:
               articleFound = _context5.sent;
 
               if (!(articleFound.length < 1)) {
-                _context5.next = 20;
+                _context5.next = 22;
                 break;
               }
 
               return _context5.abrupt("return", _response["default"].values(res, 400, 'Article not found'));
 
-            case 20:
-              _context5.next = 22;
+            case 22:
+              _context5.next = 24;
               return regeneratorRuntime.awrap(_commentModel["default"].find("gifarticleid=".concat(articleId, "&type=article"), 'createdon'));
 
-            case 22:
+            case 24:
               commentsByArticle = _context5.sent;
               comments = commentsByArticle.map(function (item) {
                 return {
@@ -487,7 +494,7 @@ function () {
               };
               return _context5.abrupt("return", _response["default"].values(res, 200, data));
 
-            case 26:
+            case 28:
             case "end":
               return _context5.stop();
           }

@@ -30,7 +30,6 @@ class ArticleController {
           if (articleExist.length > 0) return response.values(res, 400, 'Article already exists' );
         }
     
-      
         const createdArticle = await newArticle.save();
         if (createdArticle.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with new article');
 
@@ -49,15 +48,14 @@ class ArticleController {
   static async updateArticle(req, res) {
     const { title, article } = req.body;
     const { id } = req.token;
-    let authorId = id;
-    
     const articleId = parseInt(req.params.articleId, 10);
-    
+    const authorId = parseInt(id, 10);
+
     missingValue.values(res, authorId, title, article);   
 
     if (isNaN(articleId)) return response.values(res, 400, 'ArticleId must be a number');
     if (isNaN(authorId)) return response.values(res, 400, 'AuthorId must be a number');
-
+    
     const articleExist = await ArticleModel.findByJoin('employees', `articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
     if (articleExist) {
       if (articleExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with article');
@@ -91,7 +89,6 @@ class ArticleController {
     if (isNaN(authorId)) return response.values(res, 400, 'AuthorId must be a number');
 
     const articleExist = await ArticleModel.findByJoin('employees', `articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
-    console.log(articleExist);
     
     if (articleExist.length < 0) {
       if (articleExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with article');
@@ -164,8 +161,9 @@ class ArticleController {
    
       return response.values(res, 200, searchResult);
   } else {
-        if (isNaN(articleId)) return response.values(res, 400, 'Invalid article ID');
-        }
+        
+        if (isNaN(articleId)) return response.values(res, 400, 'ArticleId must be a number');
+        if (isNaN(authorId)) return response.values(res, 400, 'AuthorId must be a number');
 
         const articleFound = await ArticleModel.find(`articleid=${articleId}`);
         if (articleFound.length < 1) return response.values(res, 400, 'Article not found');
@@ -185,6 +183,7 @@ class ArticleController {
           comments
         };
         return response.values(res, 200, data);
+      }
   }
   
 } 
