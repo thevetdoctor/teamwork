@@ -4,7 +4,7 @@ import parser from 'body-parser';
 import routeHandler from './routes';
 import swaggerUI from 'swagger-ui-express';
 import swaggerSpec from './swagger';
-import regenerator from 'regenerator-runtime';
+import regeneratorRuntime from 'regenerator-runtime';
 
 // regenerator;
 

@@ -8,7 +8,7 @@ gulp.task('build', (done) => {
         .pipe(babel({
             presets: ["@babel/preset-env"]
           }))
-        .pipe(gulp.dest('./build/'));
+        .pipe(gulp.dest('./dist/'));
         done();
 }); 
 
