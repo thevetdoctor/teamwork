@@ -8,7 +8,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "nodemon --exec babel-node src/main.js",
-    "start": "node ./build/main.js",
+    "start": "node ./dist/main.js",
     "test": "set NODE_ENV=test && nyc --require @babel/register mocha src/test --exit",
     "test1": "set NODE_ENV=test && babel-node src/db/clearTestDB && nyc --require @babel/register mocha src/test --exit",
     "cleardb": "babel-node src/db/clearTestDB --exit",
