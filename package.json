@@ -8,12 +8,11 @@
   "main": "main.js",
   "scripts": {
     "dev": "nodemon --exec babel-node src/main.js",
-    "start": "node build/main.js",
+    "start": "node ./build/main.js",
     "test": "set NODE_ENV=test && nyc --require @babel/register mocha src/test --exit",
     "test1": "set NODE_ENV=test && babel-node src/db/clearTestDB && nyc --require @babel/register mocha src/test --exit",
     "cleardb": "babel-node src/db/clearTestDB --exit",
-    "removebuild": "rm -rf ./build",
-    "build": "npm run removebuild && babel-node src --out-dir build --copy-files",
+    "clean": "rm -rf build && mkdir build",
     "pre-test": "set NODE_ENV=test && babel-node src/db/clearTestDB --exit",
     "cleardbtest": "set NODE_ENV=test && babel-node src/db/clearTestDB --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
@@ -35,8 +34,8 @@
   },
   "homepage": "https://github.com/thevetdoctor/teamwork#readme",
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/node": "^7.7.0",
+    "@babel/core": "^7.7.4",
+    "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.7.1",
     "@babel/register": "^7.7.0",
     "coveralls": "^3.0.7",
