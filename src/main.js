@@ -18,7 +18,6 @@ app.use(parser.json());
 // use swagger-Ui-express for your app documentation endpoint
 app.use('/api/v1/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-routeHandler(app);
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -27,6 +26,8 @@ app.use((req, res, next) => {
 
     next();
 });
+
+routeHandler(app);
 
 
 app.use((error, req, res, next) => {
