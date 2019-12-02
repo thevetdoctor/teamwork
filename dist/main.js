@@ -48,10 +48,12 @@ var tag = __dirname.slice(__dirname.lastIndexOf('\\') + 1);
 
 console.log('Directory: ', tag);
 app.get('/api/v1', function (req, res, next) {
-  res.sendFile(_path["default"].join(__dirname.replace("".concat(tag), '\\page.html')));
+  // res.sendFile(path.join(__dirname.replace(`${tag}`,'\\page.html'))); 
+  res.sendFile(_path["default"].join(__dirname.replace('dist', '\\page.html')));
 });
 app.get('/', function (req, res, next) {
-  res.sendFile(_path["default"].join(__dirname.replace("".concat(tag), '\\index.html')));
+  //   res.sendFile(path.join(__dirname.replace(`${tag}`,'\\index.html'))); 
+  res.sendFile(_path["default"].join(__dirname.replace('dist', '\\index.html')));
 });
 var port = process.env.PORT || 8000;
 app.listen(port, function () {
