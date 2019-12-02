@@ -12,12 +12,17 @@ export default class BaseModel {
     let obj = this.name;
     obj = obj.replace('Model', 's').toLowerCase();
     // console.log(obj, position, order);
-    const res = await db.query(...findQuery(obj, position, order))
-      .then(result => result.rows)
-      .catch(err => {
-        return 'Error found here!', err.message;
-      });
-    return res;
+
+    // try {
+        const res = await db.query(...findQuery(obj, position, order))
+        .then(result => result.rows)
+        .catch(err => {
+          return 'Error found here!', err.message;
+        });
+        return res;
+    // } catch(err) {
+    //     console.log('Error with try catch');
+    // }
   }
 
   static async findByJoin(joinTable, on, position) {

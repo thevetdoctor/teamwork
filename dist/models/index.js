@@ -47,6 +47,7 @@ function () {
             case 0:
               obj = this.name;
               obj = obj.replace('Model', 's').toLowerCase(); // console.log(obj, position, order);
+              // try {
 
               _context.next = 4;
               return regeneratorRuntime.awrap(_db["default"].query.apply(_db["default"], _toConsumableArray((0, _query.findQuery)(obj, position, order))).then(function (result) {
