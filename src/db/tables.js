@@ -8,7 +8,7 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   jobRole TEXT NOT NULL,
                                                   department TEXT NOT NULL,
                                                   address VARCHAR(255) NOT NULL,
-                                                  isAdmin BOOLEAN DEFAULT FALSE, 
+                                                  isAdmin BOOLEAN DEFAULT false, 
                                                   createdOn TIME WITH TIME ZONE DEFAULT NOW()
                                                 );
                     CREATE TABLE IF NOT EXISTS gifs(

@@ -5,9 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _db = _interopRequireDefault(require("../db"));
+var _ = _interopRequireDefault(require("."));
 
-var _migrations = _interopRequireDefault(require("../db/migrations"));
+var _migrations = _interopRequireDefault(require("./migrations"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -21,7 +21,7 @@ var clearDB = function clearDB() {
         case 0:
           _context.prev = 0;
           _context.next = 3;
-          return regeneratorRuntime.awrap(_db["default"].query(clearDBQuery));
+          return regeneratorRuntime.awrap(_["default"].query(clearDBQuery));
 
         case 3:
           clear = _context.sent;
@@ -41,7 +41,7 @@ var clearDB = function clearDB() {
 };
 
 clearDB().then(function (result) {
-  return console.log('TestDB cleared');
+  return console.log('DB cleared');
 })["catch"](function (e) {
   return console.log(e);
 });
