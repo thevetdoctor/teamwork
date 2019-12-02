@@ -40,12 +40,14 @@ app.use((error, req, res, next) => {
 
 app.get('/api/v1', (req, res, next) => {
     
-    res.sendFile(path.join(__dirname.replace(`${tag}`,'\\page.html'))); 
+    // res.sendFile(path.join(__dirname.replace(`${tag}`,'\\page.html'))); 
+    res.sendFile(path.join(__dirname.replace('dist','\\page.html'))); 
 });
  
 app.get('/', (req, res, next) => { 
     
-  res.sendFile(path.join(__dirname.replace(`${tag}`,'\\index.html'))); 
+//   res.sendFile(path.join(__dirname.replace(`${tag}`,'\\index.html'))); 
+  res.sendFile(path.join(__dirname.replace('dist','\\index.html'))); 
 });
 
 const port = process.env.PORT || 8000;
