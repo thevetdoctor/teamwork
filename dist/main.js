@@ -31,13 +31,13 @@ app.use(_bodyParser["default"].urlencoded({
 app.use(_bodyParser["default"].json()); // use swagger-Ui-express for your app documentation endpoint
 
 app.use('/api/v1/docs', _swaggerUiExpress["default"].serve, _swaggerUiExpress["default"].setup(_swagger["default"]));
-(0, _routes["default"])(app);
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', '*');
   res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE');
   next();
 });
+(0, _routes["default"])(app);
 app.use(function (error, req, res, next) {
   console.error(error.stack);
   res.status(500).send('Something broke!');
