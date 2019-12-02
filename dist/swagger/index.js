@@ -22,7 +22,12 @@ var swaggerDefinition = {
   // the host or url of the app
   basePath: '/api/v1/' // the basepath of your endpoint
 
-}; // options for the swagger docs
+};
+
+if (process.env.NODE_ENV === 'production') {
+  swaggerDefinition.host = 'obateamwork.herokuapp.com';
+} // options for the swagger docs
+
 
 var options = {
   // import swaggerDefinitions

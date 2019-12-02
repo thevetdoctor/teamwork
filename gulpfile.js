@@ -1,7 +1,8 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
-const connect = require('gulp-connect');
-const server = require('gulp-express');
+// const connect = require('gulp-connect');
+// const server = require('gulp-express');
+const nodemon = require('gulp-nodemon');
 
 gulp.task('build', (done) => {
     gulp.src('./src/**/*')
@@ -25,15 +26,27 @@ gulp.task('watch', gulp.parallel((done) => {
     done();
 }));
 
-gulp.task('connect', (done) => {
-    connect.server({
-        root: 'build/',
-        port: 3000,
-        livereload: true
+// gulp.task('connect', (done) => {
+//     connect.server({
+//         root: 'build/',
+//         port: 3000,
+//         livereload: true
+//     });
+//     done(); 
+// });
+
+gulp.task('nodemon', (done) => {
+    nodemon({
+        script: 'dist/main.js',
+        ext: 'js',
+        ignore:['dist/']
+    })
+    .on('restart', () => {
+        console.log('>> node restart !!!');
     });
     done(); 
 });
 
-gulp.task('default', gulp.series('build', 'watch', 'connect', (callback) => {
+gulp.task('default', gulp.series('build',  'watch', 'nodemon', (callback) => {
     callback();
 }));

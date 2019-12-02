@@ -11,7 +11,9 @@ const swaggerDefinition = {
   basePath: '/api/v1/', // the basepath of your endpoint
 };
  
- 
+if (process.env.NODE_ENV === 'production') {
+  swaggerDefinition.host = 'obateamwork.herokuapp.com';
+}
 // options for the swagger docs
 const options = {
   // import swaggerDefinitions
