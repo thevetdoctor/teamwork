@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'test ') {
       console.log('Environment => Testing Cloud');
     }
 } else {
-   if(process.env.COMPUTERNAME === 'ACER-PC') {
+   if(process.env.COMPUTERNAME !== 'ACER-PC') {
       db = new Client(dbUrl);
       console.log('Environment => Development');
     } else {

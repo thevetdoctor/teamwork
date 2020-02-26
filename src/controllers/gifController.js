@@ -35,6 +35,7 @@ static async createGif(req, res) {
               await cloudinary.v2.uploader.upload(imageUrl, { folder: 'teamwork/', use_filename: true, 
               unique_filename: false }, (error, result) => {
               if(result){
+                console.log(result);
               resolve(result);
                 } else {
                   console.log('error with upload');

@@ -116,6 +116,7 @@ function () {
                           unique_filename: false
                         }, function (error, result) {
                           if (result) {
+                            console.log(result);
                             resolve(result);
                           } else {
                             console.log('error with upload');

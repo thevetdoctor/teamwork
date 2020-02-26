@@ -66,9 +66,10 @@ class EmployeeController {
                               isAdmin: emailExist[0].isadmin,
                             };
     const token = jwt.sign({ tokenDetails }, process.env.SECRET, { expiresIn: '2h' });
-
+console.log(emailExist[0].isadmin);
     return response.values(res, 200, {token, 
                                       userId: emailExist[0].userid,
+                                      isAdmin: emailExist[0].isadmin
                                     });
   }
 }

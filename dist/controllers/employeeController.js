@@ -167,12 +167,14 @@ function () {
               }, process.env.SECRET, {
                 expiresIn: '2h'
               });
+              console.log(emailExist[0].isadmin);
               return _context2.abrupt("return", _response["default"].values(res, 200, {
                 token: token,
-                userId: emailExist[0].userid
+                userId: emailExist[0].userid,
+                isAdmin: emailExist[0].isadmin
               }));
 
-            case 16:
+            case 17:
             case "end":
               return _context2.stop();
           }
