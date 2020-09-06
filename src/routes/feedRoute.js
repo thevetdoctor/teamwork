@@ -7,7 +7,8 @@ import authUser from '../checkAuth/authUser';
 const router = express.Router();
 
 
-router.get('/', checkAuth, authUser, FeedController.getFeed);
+// router.get('/', checkAuth, authUser, FeedController.getFeed);
+router.get('/', FeedController.getFeed);
 
 router.patch('/like', checkAuth, authUser, FeedController.likeEntity);
 

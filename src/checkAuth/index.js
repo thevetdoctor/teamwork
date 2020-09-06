@@ -11,6 +11,7 @@ const checkAuth = (req, res, next) => {
     req.token = token;
 
     jwt.verify(req.token, process.env.SECRET, (err, decoded) => {
+      // console.log(err);
       if (err) return response.values(res, 403, 'Error with credentials');
       req.token = decoded.tokenDetails;
       next();

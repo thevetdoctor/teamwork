@@ -1,11 +1,13 @@
 import db from '../db';
-import { findQuery, updateQuery, deleteQuery, searchQuery } from '../db/query';
+import {
+  findQuery, updateQuery, deleteQuery, searchQuery,
+} from '../db/query';
 import 'regenerator-runtime';
 
 export default class BaseModel {
-    // constructor() {
-    // this.name = name;
-    // } 
+  // constructor() {
+  // this.name = name;
+  // }
 
 
   static async find(position, order) {
@@ -14,12 +16,10 @@ export default class BaseModel {
     // console.log(obj, position, order);
 
     // try {
-        const res = await db.query(...findQuery(obj, position, order))
-        .then(result => result.rows)
-        .catch(err => {
-          return 'Error found here!', err.message;
-        });
-        return res;
+    const res = await db.query(...findQuery(obj, position, order))
+      .then((result) => result.rows)
+      .catch((err) => ('Error found here!', err.message));
+    return res;
     // } catch(err) {
     //     console.log('Error with try catch');
     // }
@@ -29,26 +29,22 @@ export default class BaseModel {
     let obj = this.name;
     obj = obj.replace('Model', 's').toLowerCase();
     // console.log(obj, on, position);
-    let joinQuery = `SELECT * FROM ${obj} INNER JOIN ${joinTable} ON ${on} WHERE ${position}`;
+    const joinQuery = `SELECT * FROM ${obj} INNER JOIN ${joinTable} ON ${on} WHERE ${position}`;
     const res = await db.query(joinQuery)
-      .then(result => result.rows)
-      .catch(err => {
-        return 'Error found here!', err.message;
-      });
+      .then((result) => result.rows)
+      .catch((err) => ('Error found here!', err.message));
     // console.log('join query', joinQuery, 'result', res);
     return res;
   }
 
- 
+
   static async delete(position) {
     let obj = this.name;
     obj = obj.replace('Model', 's').toLowerCase();
     // console.log(obj);
     const res = await db.query(...deleteQuery(obj, position))
-      .then(result => result.rows)
-      .catch(err => {
-        return 'Error found here!', err.message;
-      });
+      .then((result) => result.rows)
+      .catch((err) => ('Error found here!', err.message));
     return res;
   }
 
@@ -57,10 +53,8 @@ export default class BaseModel {
     obj = obj.replace('Model', 's').toLowerCase();
     // console.log(obj);
     const res = await db.query(...updateQuery(obj, position, condition, by))
-      .then(result => result.rows)
-      .catch(err => {
-        return 'Error found here!', err.message;
-      });
+      .then((result) => result.rows)
+      .catch((err) => ('Error found here!', err.message));
     return res;
   }
 
@@ -69,14 +63,9 @@ export default class BaseModel {
     obj = obj.replace('Model', 's').toLowerCase();
     // console.log(obj, position, order);
     const res = await db.query(...searchQuery(obj, position, order))
-      .then(result => result.rows)
-      .catch(err => {
-        return 'Error found here!', err.message;
-      });
-    
+      .then((result) => result.rows)
+      .catch((err) => ('Error found here!', err.message));
+
     return res;
   }
-
-
-  
 }

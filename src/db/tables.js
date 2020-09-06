@@ -9,17 +9,19 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   department TEXT NOT NULL,
                                                   address VARCHAR(255) NOT NULL,
                                                   isAdmin BOOLEAN DEFAULT false, 
-                                                  createdOn TIME WITH TIME ZONE DEFAULT NOW()
+                                                  createdOn TIMESTAMP WITH TIME ZONE DEFAULT NOW()
                                                 );
                     CREATE TABLE IF NOT EXISTS gifs(
                                                   gifId SERIAL PRIMARY KEY,
                                                   authorId INT NOT NULL,
                                                   title TEXT NOT NULL,
                                                   imageUrl VARCHAR(255) NOT NULL,
-                                                  createdOn TIME WITH TIME ZONE DEFAULT NOW(),
-                                                  lastUpdated TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  createdOn TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                                                  lastUpdated TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
                                                   flagged BOOLEAN DEFAULT false,
                                                   liked INT DEFAULT 0,
+                                                  commentCount INT DEFAULT 0,
+                                                  type TEXT NOT NULL DEFAULT 'gif',
                                                   foreign key(authorId) references employees(userId)
                                                 );
                     CREATE TABLE IF NOT EXISTS articles(
@@ -27,10 +29,12 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   authorId INT NOT NULL,
                                                   title TEXT NOT NULL,
                                                   article TEXT NOT NULL,
-                                                  createdOn TIME WITH TIME ZONE DEFAULT NOW(),
-                                                  lastUpdated TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  createdOn TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                                                  lastUpdated TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
                                                   flagged BOOLEAN DEFAULT false,
                                                   liked INT DEFAULT 0,
+                                                  commentCount INT DEFAULT 0,
+                                                  type TEXT NOT NULL DEFAULT 'article',
                                                   foreign key(authorId) references employees(userId)
                                                 );
                     CREATE TABLE IF NOT EXISTS comments(
@@ -39,13 +43,14 @@ const tableQuery = `CREATE TABLE IF NOT EXISTS employees(
                                                   gifarticleId INT NOT NULL,
                                                   comment TEXT NOT NULL,
                                                   type TEXT DEFAULT 'article',
-                                                  createdOn TIME WITH TIME ZONE DEFAULT NOW(),
+                                                  createdOn TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
                                                   flagged BOOLEAN DEFAULT false,
                                                   liked INT DEFAULT 0,
-                                                  foreign key(authorId) references employees(userId),
-                                                  foreign key(gifarticleId) references gifs(gifId),
-                                                  foreign key(gifarticleId) references articles(articleId)
+                                                  foreign key(authorId) references employees(userId)
                                                 );`;
- 
+
 
 export default tableQuery;
+
+// foreign key(gifarticleId) references gifs(gifId),
+// foreign key(gifarticleId) references articles(articleId)

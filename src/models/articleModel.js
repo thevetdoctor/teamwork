@@ -32,8 +32,8 @@ class ArticleModel extends BaseModel {
     // console.log(queryStr, objValues);
 
     const res = await db.query(queryStr, objValues)
-      .then(result => result.rows)
-      .catch(err => ('Error found here!', err.message));
+      .then((result) => result.rows)
+      .catch((err) => ('Error found here!', err.message));
     // console.log(res[0]);
     return res;
   }

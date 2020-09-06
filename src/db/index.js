@@ -21,27 +21,25 @@ const dbUrlTest = {
   port: process.env.TEST_DB_PORT,
 };
 
- 
+
 console.log('NODE_ENV', process.env.NODE_ENV, process.env.COMPUTERNAME);
 
 let db;
 
 if (process.env.NODE_ENV === 'test ') {
-   if(process.env.COMPUTERNAME === 'ACER-PC') {
-      db = new Client(dbUrlTest);
-      console.log('Environment => Testing Local');
-    } else {
-      db = new Client(process.env.DB_CLOUD_TEST);
-      console.log('Environment => Testing Cloud');
-    }
+  if (process.env.COMPUTERNAME === 'ACER-PC') {
+    db = new Client(dbUrlTest);
+    console.log('Environment => Testing Local');
+  } else {
+    db = new Client(process.env.DB_CLOUD_TEST);
+    console.log('Environment => Testing Cloud');
+  }
+} else if (process.env.COMPUTERNAME === 'ACER-PC') {
+  db = new Client(dbUrl);
+  console.log('Environment => Development');
 } else {
-   if(process.env.COMPUTERNAME !== 'ACER-PC') {
-      db = new Client(dbUrl);
-      console.log('Environment => Development');
-    } else {
-      db = new Client(process.env.DB_CLOUD);
-      console.log('Environment => Production');
-    }
+  db = new Client(process.env.DB_CLOUD);
+  console.log('Environment => Production');
 }
 
 db.connect((err, res) => {

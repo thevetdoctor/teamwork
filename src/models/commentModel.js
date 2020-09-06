@@ -17,7 +17,7 @@ class CommentModel extends BaseModel {
     // console.log(obj);
     const objKeys = Object.keys(this);
     const objValues = Object.values(this);
-    let valuesCount = [];
+    const valuesCount = [];
     for (let i = 1; i <= objKeys.length; i++) {
       valuesCount.push(`$${i}`);
     }
@@ -30,10 +30,8 @@ class CommentModel extends BaseModel {
     }
 
     const res = await db.query(queryStr, objValues)
-      .then(result => result.rows)
-      .catch(err => {
-        return 'Error found here!', err.message;
-      });
+      .then((result) => result.rows)
+      .catch((err) => ('Error found here!', err.message));
     return res;
   }
 }

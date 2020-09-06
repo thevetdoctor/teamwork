@@ -197,7 +197,7 @@ paths:
         500:
           description: 'Server error'
           headers: {}
-  /articles/17:
+  /articles/:articleId:
     patch:
       description: ''
       summary: Update Article
@@ -335,7 +335,7 @@ paths:
   # /articles/:articleId(get):
     get:
       description: ''
-      summary: View a specific Article
+      summary: View comments on a specific Article
       tags:
       - Articles
       operationId: ArticlesGet

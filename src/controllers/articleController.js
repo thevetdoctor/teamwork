@@ -3,47 +3,46 @@ import EmployeeModel from '../models/employeeModel';
 import CommentModel from '../models/commentModel';
 import missingValue from '../helpers/missingValue';
 import response from '../helpers/response';
-
+import db from '../db';
 
 class ArticleController {
-          
-          // create articles
+  // create articles
 
-    static async createArticle(req, res) {
-        const { title, article } = req.body;
-        const { id } = req.token;
-        const authorId = parseInt(id, 10);
-    
-        const newArticle = new ArticleModel(authorId, title, article);
-    
-        missingValue.values(res, authorId, title, article);
-     
-        const authorExist = await EmployeeModel.find(`userid=${newArticle.authorId}`);
-        if (authorExist) {
-          if (authorExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with author');
-          if (authorExist.length < 1) return response.values(res, 400, 'Author not found');
-        }
-    
-        const articleExist = await ArticleModel.find(`title=${newArticle.title}`);
-        if (articleExist) {
-          if (articleExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with article');
-          if (articleExist.length > 0) return response.values(res, 400, 'Article already exists' );
-        }
-    
-        const createdArticle = await newArticle.save();
-        if (createdArticle.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with new article');
+  static async createArticle(req, res) {
+    const { title, article } = req.body;
+    const { id } = req.token;
+    const authorId = parseInt(id, 10);
 
-        const data = {
-          message: 'Article successfully posted',
-          articleId: createdArticle[0].articleid,
-          createdOn: createdArticle[0].createdon,
-          title: createdArticle[0].title,
-        }
-        
-        return response.values(res, 201, data);
-      }
-    
-      // Update articles by ID
+    const newArticle = new ArticleModel(authorId, title, article);
+
+    missingValue.values(res, authorId, title, article);
+
+    const authorExist = await EmployeeModel.find(`userid=${newArticle.authorId}`);
+    if (authorExist) {
+      if (authorExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with author');
+      if (authorExist.length < 1) return response.values(res, 400, 'Author not found');
+    }
+
+    const articleExist = await ArticleModel.find(`title=${newArticle.title}`);
+    if (articleExist) {
+      if (articleExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with article');
+      if (articleExist.length > 0) return response.values(res, 400, 'Article already exists');
+    }
+
+    const createdArticle = await newArticle.save();
+    if (createdArticle.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with new article');
+
+    const data = {
+      message: 'Article successfully posted',
+      articleId: createdArticle[0].articleid,
+      createdOn: createdArticle[0].createdon,
+      title: createdArticle[0].title,
+    };
+
+    return response.values(res, 201, data);
+  }
+
+  // Update articles by ID
 
   static async updateArticle(req, res) {
     const { title, article } = req.body;
@@ -51,26 +50,26 @@ class ArticleController {
     const articleId = parseInt(req.params.articleId, 10);
     const authorId = parseInt(id, 10);
 
-    missingValue.values(res, authorId, title, article);   
+    missingValue.values(res, authorId, title, article);
 
     if (isNaN(articleId)) return response.values(res, 400, 'ArticleId must be a number');
     if (isNaN(authorId)) return response.values(res, 400, 'AuthorId must be a number');
-    
-    const articleExist = await ArticleModel.findByJoin('employees', `articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
+
+    const articleExist = await ArticleModel.findByJoin('employees', 'articles.authorid=employees.userid', `articleid=${articleId} AND authorid=${authorId}`);
     if (articleExist) {
       if (articleExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with article');
       if (articleExist.length < 1) return response.values(res, 400, 'Article not found');
     }
 
     const updatedArticle = await ArticleModel.update(`title=${title}&article=${article}`, `articleid=${articleId}`);
-    if (updatedArticle.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with updated answer' );
+    if (updatedArticle.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with updated answer');
 
     const data = {
       message: 'Article successfully updated',
       title: updatedArticle[0].title,
       article: updatedArticle[0].article,
       lastUpdated: updatedArticle[0].lastupdated,
-    }
+    };
     return response.values(res, 200, data);
   }
 
@@ -80,19 +79,21 @@ class ArticleController {
     const { articleId } = req.params;
     const { id } = req.token;
     let authorId = id;
+    console.log(req.token.isAdmin);
 
     missingValue.values(res, authorId);
 
-      authorId = parseInt(authorId, 10);
+    authorId = parseInt(authorId, 10);
 
     if (isNaN(articleId)) return response.values(res, 400, 'ArticleId must be a number');
     if (isNaN(authorId)) return response.values(res, 400, 'AuthorId must be a number');
 
-    const articleExist = await ArticleModel.findByJoin('employees', `articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
-    
-    if (articleExist.length < 0) {
+    const articleExist = await ArticleModel.findByJoin('employees', 'articles.authorid=employees.userid', `articleid=${articleId} AND authorid=${authorId}`);
+
+    if (articleExist) {
+      // console.log(articleExist);
       if (articleExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with article');
-      if (articleExist.length < 1) return response.values(res, 400, 'Article not found');
+      if ((articleExist.length < 1) && !req.token.isAdmin) return response.values(res, 400, 'Article not found');
     }
 
     const articleDeleted = await ArticleModel.delete(`articleid=${articleId}`);
@@ -108,38 +109,47 @@ class ArticleController {
     const { comment } = req.body;
     const { articleId } = req.params;
     const authorId = id;
-  
-        const commentToBeCreated = new CommentModel(authorId, articleId, comment);
-        
-        missingValue.values(res, authorId, articleId, comment);
-    
-      if (isNaN(articleId)) return response.values(res, 400, 'ArticleId must be a number');
-      if (isNaN(authorId)) return response.values(res, 400, 'AuthorId must be a number');
-  
-      const articleExist = await ArticleModel.findByJoin('employees', `articles.authorid=employees.userid`, `articleid=${articleId} AND authorid=${authorId}`);
-      if (articleExist) {
-        if (articleExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with article');
-        if (articleExist.length < 1) return response.values(res, 400, 'Article not found');
-      }
 
-      const commentExist = await CommentModel.findByJoin('articles', `comments.gifarticleid=articles.articleid`, `articles.articleid=${articleId} AND comments.comment='${comment}'`);
+    const commentToBeCreated = new CommentModel(authorId, parseInt(articleId, 10), comment);
+    console.log(authorId, articleId, comment);
 
-      if (commentExist) {
-        if (commentExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found');
-        if (commentExist.length > 0) return response.values(res, 400, 'Same comment already given');
-      }
+    missingValue.values(res, authorId, articleId, comment);
 
-      const newComment = await commentToBeCreated.save();
-      if (newComment.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with new comment');
-      
-      const data = {
-        message: 'Comment successfully created',
-        createdOn: newComment[0].createdon,
-        articleTitle: articleExist[0].title,
-        article: articleExist[0].article,
-        comment,
-      }
-      return response.values(res, 201, data);
+    if (isNaN(articleId)) return response.values(res, 400, 'ArticleId must be a number');
+    if (isNaN(authorId)) return response.values(res, 400, 'AuthorId must be a number');
+
+    const articleExist = await ArticleModel.findByJoin('employees', 'articles.authorid=employees.userid', `articleid=${articleId} AND authorid=${authorId}`);
+    if (articleExist) {
+      console.log(articleExist);
+      if (articleExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with article');
+      if (articleExist.length < 1) return response.values(res, 400, 'Article not found');
+    }
+
+    const commentExist = await CommentModel.findByJoin('articles', 'comments.gifarticleid=articles.articleid', `articles.articleid=${articleId} AND comments.comment='${comment}'`);
+
+    if (commentExist) {
+      if (commentExist.indexOf('not') >= 0) return response.values(res, 400, 'Some error found');
+      if (commentExist.length > 0) return response.values(res, 400, 'Same comment already given');
+    }
+
+    const newComment = await commentToBeCreated.save();
+    console.log(newComment, commentToBeCreated);
+    if (newComment.indexOf('not') >= 0) return response.values(res, 400, 'Some error found with new comment');
+
+    const updatedArticle = await db.query(`UPDATE articles SET commentcount=commentcount + 1 WHERE articleid=${articleId} RETURNING *`)
+      .then((result) => result.rows)
+      .catch((err) => response.values(res, 400, 'article could not be UPDATED'));
+    console.log(updatedArticle);
+
+    const data = {
+      message: 'Comment successfully created',
+      createdOn: newComment[0].createdon,
+      articleTitle: articleExist[0].title,
+      article: articleExist[0].article,
+      comment,
+      updatedArticle,
+    };
+    return response.values(res, 201, data);
   }
 
 
@@ -148,45 +158,42 @@ class ArticleController {
     const { articleId } = req.params;
 
     const authorId = id;
-  
-    missingValue.values(res, authorId);    
 
-      if (articleId === 'category') {
-      
+    missingValue.values(res, authorId);
+
+    if (articleId === 'category') {
       const { searchQuery } = req.query;
-     
+
       missingValue.values(res, searchQuery);
 
       const searchResult = await ArticleModel.search(`article=${searchQuery}`);
-   
+
       return response.values(res, 200, searchResult);
-  } else {
-        
-        if (isNaN(articleId)) return response.values(res, 400, 'ArticleId must be a number');
-        if (isNaN(authorId)) return response.values(res, 400, 'AuthorId must be a number');
+    }
 
-        const articleFound = await ArticleModel.find(`articleid=${articleId}`);
-        if (articleFound.length < 1) return response.values(res, 400, 'Article not found');
+    if (isNaN(articleId)) return response.values(res, 400, 'ArticleId must be a number');
+    if (isNaN(authorId)) return response.values(res, 400, 'AuthorId must be a number');
 
-        const commentsByArticle = await CommentModel.find(`gifarticleid=${articleId}&type=article`, 'createdon');
-      
-        const comments = commentsByArticle.map(item => ({
-                  commentId: item.commentid,
-                  comment: item.comment,
-                  authorId: item.authorid
-        }));
-        const data = {
-          id: articleFound[0].articleid,
-          createdOn: articleFound[0].createdon,
-          title: articleFound[0].title,
-          article: articleFound[0].article,
-          comments
-        };
-        return response.values(res, 200, data);
-      }
+    const articleFound = await ArticleModel.find(`articleid=${articleId}`);
+    if (articleFound.length < 1) return response.values(res, 400, 'Article not found');
+
+    const commentsByArticle = await CommentModel.find(`gifarticleid=${articleId}&type=article`, 'createdon');
+
+    const comments = commentsByArticle.map((item) => ({
+      commentId: item.commentid,
+      comment: item.comment,
+      authorId: item.authorid,
+    }));
+    const data = {
+      id: articleFound[0].articleid,
+      createdOn: articleFound[0].createdon,
+      title: articleFound[0].title,
+      article: articleFound[0].article,
+      comments,
+    };
+    return response.values(res, 200, data);
   }
-  
-} 
+}
 
 
 export default ArticleController;

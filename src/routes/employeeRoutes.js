@@ -7,9 +7,14 @@ import admin from '../checkAuth/admin';
 const router = express.Router();
 
 
-router.post('/create-user', checkAuth, authUser, admin, EmployeeController.createUser);
+router.post('/create-user', EmployeeController.createUser);
 
 router.post('/signin', EmployeeController.signIn);
+
+// router.get('/getuser', checkAuth, authUser, EmployeeController.getUser);
+router.get('/getuser', EmployeeController.getUser);
+
+router.get('/allAuth', EmployeeController.getUsers);
 
 
 export default router;

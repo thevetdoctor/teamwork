@@ -14,9 +14,11 @@ router.delete('/:articleId', checkAuth, authUser, ArticleController.deleteArticl
 
 router.post('/:articleId/comment', checkAuth, authUser, ArticleController.createComment);
 
+// router.get('/', checkAuth, authUser, ArticleController.getArticles);
+
 router.get('/:articleId', checkAuth, authUser, ArticleController.getArticleById);
 
 router.get('/category?searchQuery', checkAuth, authUser, ArticleController.getArticleById);
- 
+
 
 export default router;

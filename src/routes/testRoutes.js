@@ -6,5 +6,4 @@ const router = express.Router();
 router.get('/', TestController.test);
 
 
-
 export default router;
